@@ -1,0 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/26 15:32:11 by tmurakam          #+#    #+#             */
+/*   Updated: 2020/07/26 15:32:11 by tmurakam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
+#include <stdio.h>
+
+# include <unistd.h>
+# include <stdarg.h>
+
+typedef struct  s_pursed_fmt
+{
+    int flag;
+    int field_width;
+    int precision;
+    char conversion_spec; //diouxXfFeEgGaAcsb
+}               t_pursed_fmt;
+
+int	ft_printf(const char *format_str, ...);
+int format_write(char **format_str, int *char_count, va_list arg_list);
+
+char	*ft_strchr(const char *s, int c);
+int	ft_putstr(char *s);
+size_t	ft_strlen(const char *s);
+int	ft_putchar_fd(char c, int fd);
+int	ft_putnbr_fd(int n, int fd);
+
+#endif
