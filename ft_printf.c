@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/29 01:28:59 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/29 01:31:35 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,7 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 {
 	t_parsed_fmt	parsed_fmt;
 	int		char_count_in_format;
-	char *str;
 	int d;
-	int i;
-	char fill_c;
 
 	char_count_in_format = 0;
 	char_count_in_format++;
