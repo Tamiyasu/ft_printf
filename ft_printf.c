@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/28 23:06:16 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/28 23:17:29 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 		i = 0;
 		fill_c = ' ';
 		str = va_arg(arg_list, char*);
+		if(!str)
+			str = "(null)";
 		if (parsed_fmt.flag & F_ZERO && !(parsed_fmt.flag & F_MINUS))
 			fill_c = '0';
 		if (parsed_fmt.flag & F_MINUS)
