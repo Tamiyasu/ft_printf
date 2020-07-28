@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/28 21:32:40 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/28 22:29:23 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void format_purser(char **format_str, t_parsed_fmt *parsed_fmt, va_list arg_list
 	{
 		/*あとでけす むらかみたみやす*/
 	}
-	while (ft_strchr("-+ 0#", **format_str))
+	while (**format_str && ft_strchr("-+ 0#", **format_str))
 	{
 		if (**format_str == '-')
 			parsed_fmt->flag |= F_MINUS;
@@ -58,21 +58,20 @@ void format_purser(char **format_str, t_parsed_fmt *parsed_fmt, va_list arg_list
 			parsed_fmt->flag |= F_SHARP;
 		(*format_str)++;
 	}
-	while (ft_strchr("0123456789*", **format_str))
+	while (**format_str && ft_strchr("0123456789*", **format_str))
 	{
 		if('0' <= **format_str && **format_str <= '9' && parsed_fmt->field_width != -1)
 		{
 			parsed_fmt->field_width *= 10;
 			parsed_fmt->field_width += **format_str - '0';
-			(*format_str)++;
 		}
 		else
 		{
 			parsed_fmt->field_width = -1;
-			(*format_str)++;
 		}
+		(*format_str)++;
 	}
-	while (ft_strchr("0123456789*.", **format_str))
+	while (**format_str && ft_strchr("0123456789*.", **format_str))
 	{
 		if('0' <= **format_str && **format_str <= '9' && parsed_fmt->precision != -1)
 		{
@@ -91,7 +90,7 @@ void format_purser(char **format_str, t_parsed_fmt *parsed_fmt, va_list arg_list
 			(*format_str)++;
 		}
 	}
-	while (ft_strchr("hlL", **format_str))
+	while (**format_str && ft_strchr("hlL", **format_str))
 		(*format_str)++;
 	parsed_fmt->conversion_spec = **format_str;
 	if (**format_str)
