@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/29 01:14:31 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/29 01:28:59 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,44 +113,14 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	init_t_parsed_fmt(&parsed_fmt);
 	format_purser(format_str, &parsed_fmt, arg_list);
 	if (parsed_fmt.conversion_spec == 's')
-	{
-//		printf("pres : %d\n", parsed_fmt.precision);
-		i = 0;
-		fill_c = ' ';
-		str = va_arg(arg_list, char*);
-		if(!str)
-			str = "(null)";
-		if (parsed_fmt.flag & F_ZERO && !(parsed_fmt.flag & F_MINUS))
-			fill_c = '0';
-		if (parsed_fmt.flag & F_MINUS)
-			*char_count += ft_putstr(str, MIN(parsed_fmt.precision, (int)ft_strlen(str)));
-		while (i++ < (int)parsed_fmt.field_width - MIN(parsed_fmt.precision, (int)ft_strlen(str)))
-			*char_count += ft_putchar_fd(fill_c, 1);
-		if (!(parsed_fmt.flag & F_MINUS))
-			*char_count += ft_putstr(str, MIN(parsed_fmt.precision, (int)ft_strlen(str)));
-	}
+		write_s(&parsed_fmt, char_count, arg_list);
 	else if (parsed_fmt.conversion_spec == 'd' || parsed_fmt.conversion_spec == 'i')
 	{
 		d = va_arg(arg_list, int);
 		*char_count += ft_putnbr_fd(d, 1);
 	}
-	else if (parsed_fmt.conversion_spec == 'c')
+	else if (parsed_fmt.conversion_spec == 'c' || parsed_fmt.conversion_spec == '%')
 		write_c(&parsed_fmt, char_count, arg_list);
-	else if (parsed_fmt.conversion_spec == '%')
-	{
-//		printf("\nparsed_fmt.field_width : %d\n", parsed_fmt.field_width);
-//		printf("\nparsed_fmt.flag : %d\n", parsed_fmt.flag);
-		i = 0;
-		fill_c = ' ';
-		if (parsed_fmt.flag & F_ZERO && !(parsed_fmt.flag & F_MINUS))
-			fill_c = '0';
-		if (parsed_fmt.flag & F_MINUS)
-			*char_count += ft_putchar_fd('%', 1);
-		while (i++ < parsed_fmt.field_width - 1)
-			*char_count += ft_putchar_fd(fill_c, 1);
-		if (!(parsed_fmt.flag & F_MINUS))
-			*char_count += ft_putchar_fd('%', 1);
-	}
 	return (1);	
 }
 
@@ -208,16 +178,39 @@ void write_c(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	char	c;
 	char	fill_c;
 
-	i = 0;
-	c = va_arg(arg_list, int);
 	fill_c = ' ';
+	if (parsed_fmt->conversion_spec == '%')
+		c = '%';
+	else
+		c = va_arg(arg_list, int);
 	if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS))
 		fill_c = '0';
 	if (parsed_fmt->flag & F_MINUS)
 		*char_count += ft_putchar_fd(c, 1);
+	i = 0;
 	while (i++ < parsed_fmt->field_width - 1)
 		*char_count += ft_putchar_fd(fill_c, 1);
 	if (!(parsed_fmt->flag & F_MINUS))
 		*char_count += ft_putchar_fd(c, 1);
 }
 
+void write_s(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
+{
+	int i;
+	char fill_c;
+	char *str;
+
+	str = va_arg(arg_list, char*);
+	if(!str)
+		str = "(null)";
+	fill_c = ' ';
+	if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS))
+		fill_c = '0';
+	if (parsed_fmt->flag & F_MINUS)
+		*char_count += ft_putstr(str, MIN(parsed_fmt->precision, (int)ft_strlen(str)));
+	i = 0;
+	while (i++ < (int)parsed_fmt->field_width - MIN(parsed_fmt->precision, (int)ft_strlen(str)))
+		*char_count += ft_putchar_fd(fill_c, 1);
+	if (!(parsed_fmt->flag & F_MINUS))
+		*char_count += ft_putstr(str, MIN(parsed_fmt->precision, (int)ft_strlen(str)));
+}

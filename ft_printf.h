@@ -44,5 +44,6 @@ int	ft_putchar_fd(char c, int fd);
 int	ft_putnbr_fd(int n, int fd);
 
 void write_c(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list);
+void write_s(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list);
 
 #endif
