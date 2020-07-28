@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/27 22:18:56 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/28 18:41:59 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,17 @@ void format_purser(char **format_str, t_pursed_fmt *pursed_fmt, va_list arg_list
 	}
 	while (ft_strchr("0123456789*", **format_str))
 	{
-		(*format_str)++;
+		if('0' <= **format_str && **format_str <= '9' && pursed_fmt->field_width != -1)
+		{
+			pursed_fmt->field_width *= 10;
+			pursed_fmt->field_width += **format_str - '0';
+			(*format_str)++;
+		}
+		else
+		{
+			pursed_fmt->field_width = -1;
+			(*format_str)++;
+		}
 	}
 	while (ft_strchr("0123456789*.", **format_str))
 		(*format_str)++;
@@ -76,10 +86,12 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	int		char_count_in_format;
 	char *str;
 	int d;
+	int i;
 
 	char_count_in_format = 0;
 	char_count_in_format++;
 	(*format_str)++;
+	init_t_pursed_fmt(&pursed_fmt);
 	format_purser(format_str, &pursed_fmt, arg_list);
 	if (pursed_fmt.conversion_spec == 's')
 	{
@@ -90,6 +102,19 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	{
 		d = va_arg(arg_list, int);
 		*char_count += ft_putnbr_fd(d, 1);
+	}
+	else if (pursed_fmt.conversion_spec == '%')
+	{
+		printf("\npursed_fmt.field_width : %d\n", pursed_fmt.field_width);
+
+		if (pursed_fmt.field_width - 1 > 0)
+		{
+			i = 0;
+			while (i++ < pursed_fmt.field_width - 1)
+				ft_putchar_fd(' ', 1);
+		}
+
+		*char_count += ft_putchar_fd('%', 1);
 	}
 	return (1);	
 }
