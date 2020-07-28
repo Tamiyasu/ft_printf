@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/28 22:29:23 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/28 22:40:43 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	char *str;
 	int d;
 	int i;
-	char c;
 	char fill_c;
 
 	char_count_in_format = 0;
@@ -133,19 +132,7 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 		*char_count += ft_putnbr_fd(d, 1);
 	}
 	else if (parsed_fmt.conversion_spec == 'c')
-	{
-		c = va_arg(arg_list, int);
-		i = 0;
-		fill_c = ' ';
-		if (parsed_fmt.flag & F_ZERO && !(parsed_fmt.flag & F_MINUS))
-			fill_c = '0';
-		if (parsed_fmt.flag & F_MINUS)
-			*char_count += ft_putchar_fd(c, 1);
-		while (i++ < parsed_fmt.field_width - 1)
-			*char_count += ft_putchar_fd(fill_c, 1);
-		if (!(parsed_fmt.flag & F_MINUS))
-			*char_count += ft_putchar_fd(c, 1);
-	}
+		write_c(&parsed_fmt, char_count, arg_list);
 	else if (parsed_fmt.conversion_spec == '%')
 	{
 //		printf("\nparsed_fmt.field_width : %d\n", parsed_fmt.field_width);
@@ -211,3 +198,23 @@ int	ft_putchar_fd(char c, int fd)
 {
 	return (write(fd, &c, 1));
 }
+
+void write_c(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
+{
+	int		i;
+	char	c;
+	char	fill_c;
+
+	i = 0;
+	c = va_arg(arg_list, int);
+	fill_c = ' ';
+	if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS))
+		fill_c = '0';
+	if (parsed_fmt->flag & F_MINUS)
+		*char_count += ft_putchar_fd(c, 1);
+	while (i++ < parsed_fmt->field_width - 1)
+		*char_count += ft_putchar_fd(fill_c, 1);
+	if (!(parsed_fmt->flag & F_MINUS))
+		*char_count += ft_putchar_fd(c, 1);
+}
+
