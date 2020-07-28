@@ -17,6 +17,12 @@
 # include <unistd.h>
 # include <stdarg.h>
 
+# define F_MINUS 0b1
+# define F_PLUS 0b10
+# define F_SPACE 0b100
+# define F_ZERO 0b1000
+# define F_SHARP 0b10000
+
 typedef struct  s_pursed_fmt
 {
     int flag;

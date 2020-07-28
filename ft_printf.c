@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/28 18:46:28 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/28 20:01:55 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,15 @@ void format_purser(char **format_str, t_pursed_fmt *pursed_fmt, va_list arg_list
 	while (ft_strchr("-+ 0#", **format_str))
 	{
 		if (**format_str == '-')
-			pursed_fmt->flag &= 0b1;
+			pursed_fmt->flag &= F_MINUS;
 		else if (**format_str == '+')
-			pursed_fmt->flag &= 0b10;
+			pursed_fmt->flag &= F_PLUS;
 		else if (**format_str == ' ')
-			pursed_fmt->flag &= 0b100;
+			pursed_fmt->flag &= F_SPACE;
 		else if (**format_str == '0')
-			pursed_fmt->flag &= 0b1000;
+			pursed_fmt->flag &= F_ZERO;
 		else if (**format_str == '#')
-			pursed_fmt->flag &= 0b10000;
+			pursed_fmt->flag &= F_SHARP;
 		(*format_str)++;
 	}
 	while (ft_strchr("0123456789*", **format_str))
@@ -87,6 +87,7 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	char *str;
 	int d;
 	int i;
+	char fill_c;
 
 	char_count_in_format = 0;
 	char_count_in_format++;
@@ -107,16 +108,18 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	{
 //		printf("\npursed_fmt.field_width : %d\n", pursed_fmt.field_width);
 
-		if (pursed_fmt.field_width - 1 > 0)
-		{
-			i = 0;
-			while (i++ < pursed_fmt.field_width - 1)
-				ft_putchar_fd(' ', 1);
-		}
-
-		*char_count += ft_putchar_fd('%', 1);
+		i = 0;
+		fill_c = ' ';
+		if (pursed_fmt.flag & F_ZERO && !(pursed_fmt.flag & F_MINUS))
+			fill_c = '0';
+		if (pursed_fmt.flag & F_MINUS)
+			*char_count += ft_putchar_fd('%', 1);
+		while (i++ < pursed_fmt.field_width - 1)
+			*char_count += ft_putchar_fd(fill_c, 1);
+		if (!(pursed_fmt.flag & F_MINUS))
+			*char_count += ft_putchar_fd('%', 1);
 	}
-	return (pursed_fmt.field_width);	
+	return (1);	
 }
 
 char	*ft_strchr(const char *s, int c)
