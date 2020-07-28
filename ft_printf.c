@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/28 23:17:29 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/29 01:14:31 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 		if (!(parsed_fmt.flag & F_MINUS))
 			*char_count += ft_putstr(str, MIN(parsed_fmt.precision, (int)ft_strlen(str)));
 	}
-	else if (parsed_fmt.conversion_spec == 'd')
+	else if (parsed_fmt.conversion_spec == 'd' || parsed_fmt.conversion_spec == 'i')
 	{
 		d = va_arg(arg_list, int);
 		*char_count += ft_putnbr_fd(d, 1);
