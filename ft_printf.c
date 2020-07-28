@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/28 20:01:55 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/28 20:12:36 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,30 @@ void format_purser(char **format_str, t_pursed_fmt *pursed_fmt, va_list arg_list
 	while (ft_strchr("-+ 0#", **format_str))
 	{
 		if (**format_str == '-')
-			pursed_fmt->flag &= F_MINUS;
+		{
+			pursed_fmt->flag |= F_MINUS;
+//			printf ("minus_ '%d' \n", pursed_fmt->flag);
+		}
 		else if (**format_str == '+')
-			pursed_fmt->flag &= F_PLUS;
+		{
+			pursed_fmt->flag |= F_PLUS;
+//			printf ("plus_\n");
+		}
 		else if (**format_str == ' ')
-			pursed_fmt->flag &= F_SPACE;
+		{
+			pursed_fmt->flag |= F_SPACE;
+//			printf ("space_\n");
+		}
 		else if (**format_str == '0')
-			pursed_fmt->flag &= F_ZERO;
+		{
+			pursed_fmt->flag |= F_ZERO;
+//			printf ("zero_\n");
+		}
 		else if (**format_str == '#')
-			pursed_fmt->flag &= F_SHARP;
+		{
+			pursed_fmt->flag |= F_SHARP;
+//			printf ("sharp_\n");
+		}
 		(*format_str)++;
 	}
 	while (ft_strchr("0123456789*", **format_str))
@@ -107,6 +122,7 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	else if (pursed_fmt.conversion_spec == '%')
 	{
 //		printf("\npursed_fmt.field_width : %d\n", pursed_fmt.field_width);
+//		printf("\npursed_fmt.flag : %d\n", pursed_fmt.flag);
 
 		i = 0;
 		fill_c = ' ';
