@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/28 22:57:10 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/28 23:02:41 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void init_t_parsed_fmt(t_parsed_fmt *s_parsed_fmt)
 	s_parsed_fmt->conversion_spec = '\0';
 	s_parsed_fmt->field_width = 0;
 	s_parsed_fmt->flag = 0;
-	s_parsed_fmt->precision = 0;
+	s_parsed_fmt->precision = INT_MAX;
 }
 
 void format_purser(char **format_str, t_parsed_fmt *parsed_fmt, va_list arg_list)

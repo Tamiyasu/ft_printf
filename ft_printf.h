@@ -16,7 +16,7 @@
 
 # include <unistd.h>
 # include <stdarg.h>
-
+# include <limits.h>
 # define F_MINUS 0b1
 # define F_PLUS 0b10
 # define F_SPACE 0b100
@@ -44,6 +44,5 @@ int	ft_putchar_fd(char c, int fd);
 int	ft_putnbr_fd(int n, int fd);
 
 void write_c(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list);
-
 
 #endif
