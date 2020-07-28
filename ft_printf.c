@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/28 22:40:43 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/28 22:57:10 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,17 +114,18 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	format_purser(format_str, &parsed_fmt, arg_list);
 	if (parsed_fmt.conversion_spec == 's')
 	{
+		printf("pres : %d\n", parsed_fmt.precision);
 		i = 0;
 		fill_c = ' ';
 		str = va_arg(arg_list, char*);
 		if (parsed_fmt.flag & F_ZERO && !(parsed_fmt.flag & F_MINUS))
 			fill_c = '0';
 		if (parsed_fmt.flag & F_MINUS)
-			*char_count += ft_putstr(str);
-		while (i++ < (int)parsed_fmt.field_width - (int)ft_strlen(str))
+			*char_count += ft_putstr(str, MIN(parsed_fmt.precision, (int)ft_strlen(str)));
+		while (i++ < (int)parsed_fmt.field_width - MIN(parsed_fmt.precision, (int)ft_strlen(str)))
 			*char_count += ft_putchar_fd(fill_c, 1);
 		if (!(parsed_fmt.flag & F_MINUS))
-			*char_count += ft_putstr(str);
+			*char_count += ft_putstr(str, MIN(parsed_fmt.precision, (int)ft_strlen(str)));
 	}
 	else if (parsed_fmt.conversion_spec == 'd')
 	{
@@ -163,9 +164,9 @@ char	*ft_strchr(const char *s, int c)
 	return (i_p);
 }
 
-int	ft_putstr(char *s)
+int	ft_putstr(char *s, size_t len)
 {
-	return (write(1, s, ft_strlen(s)));
+	return (write(1, s, len));
 }
 
 size_t	ft_strlen(const char *s)
