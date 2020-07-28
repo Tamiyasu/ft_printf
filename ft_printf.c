@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/28 20:12:36 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/28 21:32:40 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,109 +30,136 @@ int	ft_printf(const char *format_str, ...)
 	return (char_count);
 }
 
-void init_t_pursed_fmt(t_pursed_fmt *s_pursed_fmt)
+void init_t_parsed_fmt(t_parsed_fmt *s_parsed_fmt)
 {
-	s_pursed_fmt->conversion_spec = '\0';
-	s_pursed_fmt->field_width = 0;
-	s_pursed_fmt->flag = 0;
-	s_pursed_fmt->precision = 0;
+	s_parsed_fmt->conversion_spec = '\0';
+	s_parsed_fmt->field_width = 0;
+	s_parsed_fmt->flag = 0;
+	s_parsed_fmt->precision = 0;
 }
 
-void format_purser(char **format_str, t_pursed_fmt *pursed_fmt, va_list arg_list)
+void format_purser(char **format_str, t_parsed_fmt *parsed_fmt, va_list arg_list)
 {
 	if (arg_list)
 	{
-		
+		/*あとでけす むらかみたみやす*/
 	}
 	while (ft_strchr("-+ 0#", **format_str))
 	{
 		if (**format_str == '-')
-		{
-			pursed_fmt->flag |= F_MINUS;
-//			printf ("minus_ '%d' \n", pursed_fmt->flag);
-		}
+			parsed_fmt->flag |= F_MINUS;
 		else if (**format_str == '+')
-		{
-			pursed_fmt->flag |= F_PLUS;
-//			printf ("plus_\n");
-		}
+			parsed_fmt->flag |= F_PLUS;
 		else if (**format_str == ' ')
-		{
-			pursed_fmt->flag |= F_SPACE;
-//			printf ("space_\n");
-		}
+			parsed_fmt->flag |= F_SPACE;
 		else if (**format_str == '0')
-		{
-			pursed_fmt->flag |= F_ZERO;
-//			printf ("zero_\n");
-		}
+			parsed_fmt->flag |= F_ZERO;
 		else if (**format_str == '#')
-		{
-			pursed_fmt->flag |= F_SHARP;
-//			printf ("sharp_\n");
-		}
+			parsed_fmt->flag |= F_SHARP;
 		(*format_str)++;
 	}
 	while (ft_strchr("0123456789*", **format_str))
 	{
-		if('0' <= **format_str && **format_str <= '9' && pursed_fmt->field_width != -1)
+		if('0' <= **format_str && **format_str <= '9' && parsed_fmt->field_width != -1)
 		{
-			pursed_fmt->field_width *= 10;
-			pursed_fmt->field_width += **format_str - '0';
+			parsed_fmt->field_width *= 10;
+			parsed_fmt->field_width += **format_str - '0';
 			(*format_str)++;
 		}
 		else
 		{
-			pursed_fmt->field_width = -1;
+			parsed_fmt->field_width = -1;
 			(*format_str)++;
 		}
 	}
 	while (ft_strchr("0123456789*.", **format_str))
-		(*format_str)++;
+	{
+		if('0' <= **format_str && **format_str <= '9' && parsed_fmt->precision != -1)
+		{
+			parsed_fmt->precision *= 10;
+			parsed_fmt->precision += **format_str - '0';
+			(*format_str)++;
+		}
+		else if (**format_str == '*')
+		{
+			parsed_fmt->precision = -1;
+			(*format_str)++;
+		}
+		else
+		{
+			parsed_fmt->precision = 0;
+			(*format_str)++;
+		}
+	}
 	while (ft_strchr("hlL", **format_str))
 		(*format_str)++;
-	pursed_fmt->conversion_spec = *(*format_str)++;
+	parsed_fmt->conversion_spec = **format_str;
+	if (**format_str)
+		(*format_str)++;
 }
 
 
 int format_write(char **format_str, int *char_count, va_list arg_list)
 {
-	t_pursed_fmt	pursed_fmt;
+	t_parsed_fmt	parsed_fmt;
 	int		char_count_in_format;
 	char *str;
 	int d;
 	int i;
+	char c;
 	char fill_c;
 
 	char_count_in_format = 0;
 	char_count_in_format++;
 	(*format_str)++;
-	init_t_pursed_fmt(&pursed_fmt);
-	format_purser(format_str, &pursed_fmt, arg_list);
-	if (pursed_fmt.conversion_spec == 's')
+	init_t_parsed_fmt(&parsed_fmt);
+	format_purser(format_str, &parsed_fmt, arg_list);
+	if (parsed_fmt.conversion_spec == 's')
 	{
+		i = 0;
+		fill_c = ' ';
 		str = va_arg(arg_list, char*);
-		*char_count += ft_putstr(str);
+		if (parsed_fmt.flag & F_ZERO && !(parsed_fmt.flag & F_MINUS))
+			fill_c = '0';
+		if (parsed_fmt.flag & F_MINUS)
+			*char_count += ft_putstr(str);
+		while (i++ < (int)parsed_fmt.field_width - (int)ft_strlen(str))
+			*char_count += ft_putchar_fd(fill_c, 1);
+		if (!(parsed_fmt.flag & F_MINUS))
+			*char_count += ft_putstr(str);
 	}
-	else if (pursed_fmt.conversion_spec == 'd')
+	else if (parsed_fmt.conversion_spec == 'd')
 	{
 		d = va_arg(arg_list, int);
 		*char_count += ft_putnbr_fd(d, 1);
 	}
-	else if (pursed_fmt.conversion_spec == '%')
+	else if (parsed_fmt.conversion_spec == 'c')
 	{
-//		printf("\npursed_fmt.field_width : %d\n", pursed_fmt.field_width);
-//		printf("\npursed_fmt.flag : %d\n", pursed_fmt.flag);
-
+		c = va_arg(arg_list, int);
 		i = 0;
 		fill_c = ' ';
-		if (pursed_fmt.flag & F_ZERO && !(pursed_fmt.flag & F_MINUS))
+		if (parsed_fmt.flag & F_ZERO && !(parsed_fmt.flag & F_MINUS))
 			fill_c = '0';
-		if (pursed_fmt.flag & F_MINUS)
-			*char_count += ft_putchar_fd('%', 1);
-		while (i++ < pursed_fmt.field_width - 1)
+		if (parsed_fmt.flag & F_MINUS)
+			*char_count += ft_putchar_fd(c, 1);
+		while (i++ < parsed_fmt.field_width - 1)
 			*char_count += ft_putchar_fd(fill_c, 1);
-		if (!(pursed_fmt.flag & F_MINUS))
+		if (!(parsed_fmt.flag & F_MINUS))
+			*char_count += ft_putchar_fd(c, 1);
+	}
+	else if (parsed_fmt.conversion_spec == '%')
+	{
+//		printf("\nparsed_fmt.field_width : %d\n", parsed_fmt.field_width);
+//		printf("\nparsed_fmt.flag : %d\n", parsed_fmt.flag);
+		i = 0;
+		fill_c = ' ';
+		if (parsed_fmt.flag & F_ZERO && !(parsed_fmt.flag & F_MINUS))
+			fill_c = '0';
+		if (parsed_fmt.flag & F_MINUS)
+			*char_count += ft_putchar_fd('%', 1);
+		while (i++ < parsed_fmt.field_width - 1)
+			*char_count += ft_putchar_fd(fill_c, 1);
+		if (!(parsed_fmt.flag & F_MINUS))
 			*char_count += ft_putchar_fd('%', 1);
 	}
 	return (1);	

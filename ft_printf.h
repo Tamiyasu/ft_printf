@@ -23,13 +23,13 @@
 # define F_ZERO 0b1000
 # define F_SHARP 0b10000
 
-typedef struct  s_pursed_fmt
+typedef struct  s_parsed_fmt
 {
     int flag;
     int field_width;
     int precision;
     char conversion_spec; //diouxXfFeEgGaAcsb
-}               t_pursed_fmt;
+}               t_parsed_fmt;
 
 int	ft_printf(const char *format_str, ...);
 int format_write(char **format_str, int *char_count, va_list arg_list);
