@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/28 18:41:59 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/28 18:46:28 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	}
 	else if (pursed_fmt.conversion_spec == '%')
 	{
-		printf("\npursed_fmt.field_width : %d\n", pursed_fmt.field_width);
+//		printf("\npursed_fmt.field_width : %d\n", pursed_fmt.field_width);
 
 		if (pursed_fmt.field_width - 1 > 0)
 		{
@@ -116,7 +116,7 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 
 		*char_count += ft_putchar_fd('%', 1);
 	}
-	return (1);	
+	return (pursed_fmt.field_width);	
 }
 
 char	*ft_strchr(const char *s, int c)
