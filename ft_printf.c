@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/28 23:02:41 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/28 23:06:16 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	format_purser(format_str, &parsed_fmt, arg_list);
 	if (parsed_fmt.conversion_spec == 's')
 	{
-		printf("pres : %d\n", parsed_fmt.precision);
+//		printf("pres : %d\n", parsed_fmt.precision);
 		i = 0;
 		fill_c = ' ';
 		str = va_arg(arg_list, char*);
