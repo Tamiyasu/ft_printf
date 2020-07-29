@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/30 02:18:16 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/30 02:23:06 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ char	*ft_utoax(unsigned int n, t_parsed_fmt *parsed_fmt, int base)
 	char	*return_s;
 	int		order;
 	int		i;
-	int		n_copy;
+	unsigned int	n_copy;
 	char	base_origin_10;
 
 	base_origin_10 = 'a';
@@ -344,7 +344,7 @@ void write_u(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 		parsed_fmt->precision = parsed_fmt->field_width;
 	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
 		fill_c = '0';
-	str = ft_itoax(u, parsed_fmt, base);
+	str = ft_utoax(u, parsed_fmt, base);
 	if(!str)
 		str = "(null)";
 	fill_c = ' ';
