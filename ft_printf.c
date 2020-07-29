@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/30 02:09:57 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/30 02:18:16 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	format_purser(format_str, &parsed_fmt);
 	if (parsed_fmt.conversion_spec == 's')
 		write_s(&parsed_fmt, char_count, arg_list);
-	else if (parsed_fmt.conversion_spec == 'd')
+	else if (parsed_fmt.conversion_spec == 'd' || parsed_fmt.conversion_spec == 'i')
 		write_d(&parsed_fmt, char_count, arg_list);
-	else if (parsed_fmt.conversion_spec == 'u' || parsed_fmt.conversion_spec == 'i' ||
+	else if (parsed_fmt.conversion_spec == 'u' ||
 			 parsed_fmt.conversion_spec == 'x' || parsed_fmt.conversion_spec == 'X' ||
 			 parsed_fmt.conversion_spec == 'o')
 		write_u(&parsed_fmt, char_count, arg_list);
