@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/29 23:24:40 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/29 23:49:38 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,12 +259,14 @@ void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	char *str;
 
 	d = va_arg(arg_list, int);
+	if (parsed_fmt->flag & F_ZERO && parsed_fmt->precision == INT_MAX)
+		parsed_fmt->precision = parsed_fmt->field_width - (d < 0 ? 1 : 0);
+	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
+		fill_c = '0';
 	str = ft_itoax(d, parsed_fmt, 10);
 	if(!str)
 		str = "(null)";
 	fill_c = ' ';
-	if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS))
-		fill_c = '0';
 	if (parsed_fmt->flag & F_MINUS)
 	{
 		i = 0;
