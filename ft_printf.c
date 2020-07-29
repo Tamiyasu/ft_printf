@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/30 01:48:27 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/30 01:57:32 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 			 parsed_fmt.conversion_spec == 'x' || parsed_fmt.conversion_spec == 'X' ||
 			 parsed_fmt.conversion_spec == 'o')
 		write_d(&parsed_fmt, char_count, arg_list);
+	else if (parsed_fmt.conversion_spec == 'u')
+		write_u(&parsed_fmt, char_count, arg_list);
 	else if (parsed_fmt.conversion_spec == 'c' || parsed_fmt.conversion_spec == '%')
 		write_c(&parsed_fmt, char_count, arg_list);
 	return (1);	
@@ -272,6 +274,44 @@ void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
 		fill_c = '0';
 	str = ft_itoax(d, parsed_fmt, base);
+	if(!str)
+		str = "(null)";
+	fill_c = ' ';
+	if (parsed_fmt->flag & F_MINUS)
+	{
+		i = 0;
+		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+			*char_count += ft_putchar_fd('0', 1);
+		*char_count += ft_putstr(str, (int)ft_strlen(str));
+	}
+	i = 0;
+	while (i++ < (int)parsed_fmt->field_width - MAX(parsed_fmt->precision, (int)ft_strlen(str)))
+		*char_count += ft_putchar_fd(fill_c, 1);
+	if (!(parsed_fmt->flag & F_MINUS))
+	{
+		i = 0;
+		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+			*char_count += ft_putchar_fd('0', 1);
+		*char_count += ft_putstr(str, (int)ft_strlen(str));
+	}
+	free(str);
+}
+
+void write_u(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
+{
+	int i;
+	unsigned int u;
+	char fill_c;
+	char *str;
+	int base;
+
+	base = 10;
+	u = va_arg(arg_list, unsigned int);
+	if (parsed_fmt->flag & F_ZERO && parsed_fmt->precision == INT_MAX)
+		parsed_fmt->precision = parsed_fmt->field_width;
+	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
+		fill_c = '0';
+	str = ft_itoax(u, parsed_fmt, base);
 	if(!str)
 		str = "(null)";
 	fill_c = ' ';

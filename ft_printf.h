@@ -52,5 +52,7 @@ void	*ft_memset(void *b, int c, size_t len);
 void write_c(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list);
 void write_s(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list);
 void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list);
+void write_u(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list);
+
 
 #endif
