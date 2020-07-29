@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/30 02:05:51 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/30 02:09:57 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,10 +297,6 @@ void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	int base;
 
 	base = 10;
-	if (parsed_fmt->conversion_spec == 'x' || parsed_fmt->conversion_spec == 'X')
-		base = 16;
-	if (parsed_fmt->conversion_spec == 'o')
-		base = 8;
 	d = va_arg(arg_list, int);
 	if (parsed_fmt->flag & F_ZERO && parsed_fmt->precision == INT_MAX)
 		parsed_fmt->precision = parsed_fmt->field_width - (d < 0 ? 1 : 0);
@@ -339,6 +335,10 @@ void write_u(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	int base;
 
 	base = 10;
+	if (parsed_fmt->conversion_spec == 'x' || parsed_fmt->conversion_spec == 'X')
+		base = 16;
+	if (parsed_fmt->conversion_spec == 'o')
+		base = 8;
 	u = va_arg(arg_list, unsigned int);
 	if (parsed_fmt->flag & F_ZERO && parsed_fmt->precision == INT_MAX)
 		parsed_fmt->precision = parsed_fmt->field_width;
