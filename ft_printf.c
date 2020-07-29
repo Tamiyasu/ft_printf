@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/29 19:13:41 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/29 22:34:56 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 {
 	t_parsed_fmt	parsed_fmt;
 	int		char_count_in_format;
-	int d;
 
 	char_count_in_format = 0;
 	char_count_in_format++;
@@ -102,28 +101,29 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	return (1);	
 }
 
-char	*ft_itoa(int n)
+char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base)
 {
-	char	tmp[11];
 	char	*return_s;
-	int		o;
+	int		order;
 	int		i;
+	int		n_copy;
 
-	o = 0;
-	tmp[o++] = '0' + (0 <= n ? n % 10 : -(n % 10));
-	while (n / 10)
+	n_copy = n;
+	order = n_copy < 0 ? 2 : 1;
+	while (n_copy /= base)
+		order++;
+	order = MAX(order, parsed_fmt->precision);
+	if(!(return_s = ft_calloc(order + 1, sizeof(char))))
+		return (return_s);
+	ft_memset(return_s, '0', order);
+	*(return_s + order) = '\0';
+	if(n < 0)
+		*(return_s) = '-';
+	i = 0;
+	while (n)
 	{
-		n /= 10;
-		tmp[o++] = '0' + (0 <= n ? n % 10 : -(n % 10));
-	}
-	if (n < 0)
-		tmp[o++] = '-';
-	return_s = ft_calloc(o + 1, sizeof(char));
-	if (return_s)
-	{
-		i = 0;
-		while (o)
-			*(return_s + i++) = tmp[--o];
+		*(return_s + order - ++i) = ABS(n % base) + (ABS(n % base) < 10 ? '0' : 'a' - 10);
+		n /= base;
 	}
 	return (return_s);
 }
@@ -253,18 +253,28 @@ void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	char *str;
 
 	d = va_arg(arg_list, int);
-	str = ft_itoa(d);
+	str = ft_itoax(d, parsed_fmt, 10);
 	if(!str)
 		str = "(null)";
 	fill_c = ' ';
 	if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS))
 		fill_c = '0';
 	if (parsed_fmt->flag & F_MINUS)
-		*char_count += ft_putstr(str, MIN(parsed_fmt->precision, (int)ft_strlen(str)));
+	{
+		i = 0;
+		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+			*char_count += ft_putchar_fd('0', 1);
+		*char_count += ft_putstr(str, (int)ft_strlen(str));
+	}
 	i = 0;
-	while (i++ < (int)parsed_fmt->field_width - MIN(parsed_fmt->precision, (int)ft_strlen(str)))
+	while (i++ < (int)parsed_fmt->field_width - MAX(parsed_fmt->precision, (int)ft_strlen(str)))
 		*char_count += ft_putchar_fd(fill_c, 1);
 	if (!(parsed_fmt->flag & F_MINUS))
-		*char_count += ft_putstr(str, MIN(parsed_fmt->precision, (int)ft_strlen(str)));
+	{
+		i = 0;
+		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+			*char_count += ft_putchar_fd('0', 1);
+		*char_count += ft_putstr(str, (int)ft_strlen(str));
+	}
 	free(str);
 }
