@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/29 23:18:05 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/29 23:24:40 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,10 @@ char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base)
 	if (parsed_fmt->precision == INT_MAX)
 		parsed_fmt->precision = 0;
 	n_copy = n;
-	order = n_copy < 0 ? 2 : 1;
+	order = 1;
 	while (n_copy /= base)
 		order++;
-	order = MAX(order, parsed_fmt->precision);
+	order = MAX(order, parsed_fmt->precision) + (n < 0 ? 1 : 0);
 	if(!(return_s = ft_calloc(order + 1, sizeof(char))))
 		return (return_s);
 	ft_memset(return_s, '0', order);
