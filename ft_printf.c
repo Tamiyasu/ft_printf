@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/29 01:31:35 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/29 19:13:41 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,8 @@ void init_t_parsed_fmt(t_parsed_fmt *s_parsed_fmt)
 	s_parsed_fmt->precision = INT_MAX;
 }
 
-void format_purser(char **format_str, t_parsed_fmt *parsed_fmt, va_list arg_list)
+void read_flag(char **format_str, t_parsed_fmt *parsed_fmt)
 {
-	if (arg_list)
-	{
-		/*あとでけす むらかみたみやす*/
-	}
 	while (**format_str && ft_strchr("-+ 0#", **format_str))
 	{
 		if (**format_str == '-')
@@ -58,45 +54,33 @@ void format_purser(char **format_str, t_parsed_fmt *parsed_fmt, va_list arg_list
 			parsed_fmt->flag |= F_SHARP;
 		(*format_str)++;
 	}
-	while (**format_str && ft_strchr("0123456789*", **format_str))
+}
+
+void read_int_in_format(char **format_str, char *chr_str, int *i)
+{
+	while (**format_str && ft_strchr(chr_str, **format_str))
 	{
-		if('0' <= **format_str && **format_str <= '9' && parsed_fmt->field_width != -1)
-		{
-			parsed_fmt->field_width *= 10;
-			parsed_fmt->field_width += **format_str - '0';
-		}
+		if('0' <= **format_str && **format_str <= '9' && *i != -1)
+			*i = *i * 10 + (**format_str - '0');
+		else if(**format_str == '.')
+			*i = 0;
 		else
-		{
-			parsed_fmt->field_width = -1;
-		}
+			*i = -1;
 		(*format_str)++;
 	}
-	while (**format_str && ft_strchr("0123456789*.", **format_str))
-	{
-		if('0' <= **format_str && **format_str <= '9' && parsed_fmt->precision != -1)
-		{
-			parsed_fmt->precision *= 10;
-			parsed_fmt->precision += **format_str - '0';
-			(*format_str)++;
-		}
-		else if (**format_str == '*')
-		{
-			parsed_fmt->precision = -1;
-			(*format_str)++;
-		}
-		else
-		{
-			parsed_fmt->precision = 0;
-			(*format_str)++;
-		}
-	}
+}
+
+void format_purser(char **format_str, t_parsed_fmt *parsed_fmt)
+{
+	read_flag(format_str, parsed_fmt);
+	read_int_in_format(format_str, "0123456789*", &(parsed_fmt->field_width));
+	read_int_in_format(format_str, "0123456789*.", &(parsed_fmt->precision));
 	while (**format_str && ft_strchr("hlL", **format_str))
 		(*format_str)++;
 	parsed_fmt->conversion_spec = **format_str;
 	if (**format_str)
 		(*format_str)++;
 }
-
 
 int format_write(char **format_str, int *char_count, va_list arg_list)
 {
@@ -108,17 +92,40 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	char_count_in_format++;
 	(*format_str)++;
 	init_t_parsed_fmt(&parsed_fmt);
-	format_purser(format_str, &parsed_fmt, arg_list);
+	format_purser(format_str, &parsed_fmt);
 	if (parsed_fmt.conversion_spec == 's')
 		write_s(&parsed_fmt, char_count, arg_list);
 	else if (parsed_fmt.conversion_spec == 'd' || parsed_fmt.conversion_spec == 'i')
-	{
-		d = va_arg(arg_list, int);
-		*char_count += ft_putnbr_fd(d, 1);
-	}
+		write_d(&parsed_fmt, char_count, arg_list);
 	else if (parsed_fmt.conversion_spec == 'c' || parsed_fmt.conversion_spec == '%')
 		write_c(&parsed_fmt, char_count, arg_list);
 	return (1);	
+}
+
+char	*ft_itoa(int n)
+{
+	char	tmp[11];
+	char	*return_s;
+	int		o;
+	int		i;
+
+	o = 0;
+	tmp[o++] = '0' + (0 <= n ? n % 10 : -(n % 10));
+	while (n / 10)
+	{
+		n /= 10;
+		tmp[o++] = '0' + (0 <= n ? n % 10 : -(n % 10));
+	}
+	if (n < 0)
+		tmp[o++] = '-';
+	return_s = ft_calloc(o + 1, sizeof(char));
+	if (return_s)
+	{
+		i = 0;
+		while (o)
+			*(return_s + i++) = tmp[--o];
+	}
+	return (return_s);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -169,6 +176,32 @@ int	ft_putchar_fd(char c, int fd)
 	return (write(fd, &c, 1));
 }
 
+void	*ft_calloc(size_t count, size_t size)
+{
+	char	*return_p;
+
+	return_p = malloc(count * size);
+	if (return_p)
+		ft_bzero(return_p, count * size);
+	return ((void *)return_p);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	ft_memset(s, 0, n);
+}
+
+void	*ft_memset(void *b, int c, size_t len)
+{
+	size_t i;
+
+	i = 0;
+	while (i < len)
+		*((unsigned char*)b + i++) = (unsigned char)c;
+	return (b);
+}
+
+
 void write_c(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 {
 	int		i;
@@ -210,4 +243,28 @@ void write_s(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 		*char_count += ft_putchar_fd(fill_c, 1);
 	if (!(parsed_fmt->flag & F_MINUS))
 		*char_count += ft_putstr(str, MIN(parsed_fmt->precision, (int)ft_strlen(str)));
+}
+
+void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
+{
+	int i;
+	int d;
+	char fill_c;
+	char *str;
+
+	d = va_arg(arg_list, int);
+	str = ft_itoa(d);
+	if(!str)
+		str = "(null)";
+	fill_c = ' ';
+	if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS))
+		fill_c = '0';
+	if (parsed_fmt->flag & F_MINUS)
+		*char_count += ft_putstr(str, MIN(parsed_fmt->precision, (int)ft_strlen(str)));
+	i = 0;
+	while (i++ < (int)parsed_fmt->field_width - MIN(parsed_fmt->precision, (int)ft_strlen(str)))
+		*char_count += ft_putchar_fd(fill_c, 1);
+	if (!(parsed_fmt->flag & F_MINUS))
+		*char_count += ft_putstr(str, MIN(parsed_fmt->precision, (int)ft_strlen(str)));
+	free(str);
 }
