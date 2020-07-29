@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/30 01:57:32 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/30 02:05:51 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,15 +94,48 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	format_purser(format_str, &parsed_fmt);
 	if (parsed_fmt.conversion_spec == 's')
 		write_s(&parsed_fmt, char_count, arg_list);
-	else if (parsed_fmt.conversion_spec == 'd' || parsed_fmt.conversion_spec == 'i' ||
+	else if (parsed_fmt.conversion_spec == 'd')
+		write_d(&parsed_fmt, char_count, arg_list);
+	else if (parsed_fmt.conversion_spec == 'u' || parsed_fmt.conversion_spec == 'i' ||
 			 parsed_fmt.conversion_spec == 'x' || parsed_fmt.conversion_spec == 'X' ||
 			 parsed_fmt.conversion_spec == 'o')
-		write_d(&parsed_fmt, char_count, arg_list);
-	else if (parsed_fmt.conversion_spec == 'u')
 		write_u(&parsed_fmt, char_count, arg_list);
 	else if (parsed_fmt.conversion_spec == 'c' || parsed_fmt.conversion_spec == '%')
 		write_c(&parsed_fmt, char_count, arg_list);
 	return (1);	
+}
+
+char	*ft_utoax(unsigned int n, t_parsed_fmt *parsed_fmt, int base)
+{
+	char	*return_s;
+	int		order;
+	int		i;
+	int		n_copy;
+	char	base_origin_10;
+
+	base_origin_10 = 'a';
+	if (parsed_fmt->conversion_spec == 'X')
+		base_origin_10 = 'A';
+	if (n == 0 && parsed_fmt->precision == 0)
+		return (ft_calloc(1, 1));
+	if (parsed_fmt->precision == INT_MAX)
+		parsed_fmt->precision = 0;
+	n_copy = n;
+	order = 1;
+	while (n_copy /= base)
+		order++;
+	order = MAX(order, parsed_fmt->precision);
+	if(!(return_s = ft_calloc(order + 1, sizeof(char))))
+		return (return_s);
+	ft_memset(return_s, '0', order);
+	*(return_s + order) = '\0';
+	i = 0;
+	while (n)
+	{
+		*(return_s + order - ++i) = ABS(n % base) + (ABS(n % base) < 10 ? '0' : base_origin_10 - 10);
+		n /= base;
+	}
+	return (return_s);
 }
 
 char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base)
