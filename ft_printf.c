@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/30 22:11:49 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/30 23:38:19 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,8 +311,8 @@ void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	if (parsed_fmt->flag & F_MINUS)
 	{
 		i = 0;
-		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
-			*char_count += ft_putchar_fd('0', 1);
+//		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+//			*char_count += ft_putchar_fd('0', 1);
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
 	}
 	i = 0;
@@ -321,8 +321,8 @@ void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	if (!(parsed_fmt->flag & F_MINUS))
 	{
 		i = 0;
-		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
-			*char_count += ft_putchar_fd('0', 1);
+//		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+//			*char_count += ft_putchar_fd('0', 1);
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
 	}
 	free(str);
@@ -353,8 +353,8 @@ void write_u(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	if (parsed_fmt->flag & F_MINUS)
 	{
 		i = 0;
-		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
-			*char_count += ft_putchar_fd('0', 1);
+//		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+//			*char_count += ft_putchar_fd('0', 1);
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
 	}
 	i = 0;
@@ -363,8 +363,8 @@ void write_u(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	if (!(parsed_fmt->flag & F_MINUS))
 	{
 		i = 0;
-		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
-			*char_count += ft_putchar_fd('0', 1);
+//		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+//			*char_count += ft_putchar_fd('0', 1);
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
 	}
 	free(str);
