@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/30 23:38:19 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/31 01:31:04 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	return (1);	
 }
 
-char	*ft_utoax(unsigned int n, t_parsed_fmt *parsed_fmt, int base)
+char	*ft_utoax(unsigned int n, t_parsed_fmt *parsed_fmt, int base, char *prefix)
 {
 	char	*return_s;
 	int		order;
@@ -126,11 +126,12 @@ char	*ft_utoax(unsigned int n, t_parsed_fmt *parsed_fmt, int base)
 	order = 1;
 	while (n_copy /= base)
 		order++;
-	order = MAX(order, parsed_fmt->precision);
+	order = MAX(order, parsed_fmt->precision) + ft_strlen(prefix);
 	if(!(return_s = ft_calloc(order + 1, sizeof(char))))
 		return (return_s);
 	ft_memset(return_s, '0', order);
 	*(return_s + order) = '\0';
+	ft_memcpy(return_s, prefix, ft_strlen(prefix));
 	i = 0;
 	while (n)
 	{
@@ -171,6 +172,21 @@ char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base)
 		n /= base;
 	}
 	return (return_s);
+}
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	size_t i;
+
+	i = 0;
+	if (dst != src)
+	{
+		while (i < n)
+		{
+			*((char *)dst + i) = *((char *)src + i);
+			i++;
+		}
+	}
+	return (dst);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -346,7 +362,7 @@ void write_u(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 		parsed_fmt->precision = parsed_fmt->field_width;
 	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
 		fill_c = '0';
-	str = ft_utoax(u, parsed_fmt, base);
+	str = ft_utoax(u, parsed_fmt, base, "");
 	if(!str)
 		str = "(null)";
 	fill_c = ' ';
@@ -384,7 +400,7 @@ void write_p(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 		parsed_fmt->precision = parsed_fmt->field_width;
 	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
 		fill_c = '0';
-	str = ft_utoax(u, parsed_fmt, base);
+	str = ft_utoax(u, parsed_fmt, base, "0x");
 	if(!str)
 		str = "(null)";
 	fill_c = ' ';

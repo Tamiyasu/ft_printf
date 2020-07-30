@@ -39,6 +39,7 @@ typedef struct  s_parsed_fmt
 int	ft_printf(const char *format_str, ...);
 int format_write(char **format_str, int *char_count, va_list arg_list);
 char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base);
+char	*ft_utoax(unsigned int n, t_parsed_fmt *parsed_fmt, int base, char *prefix);
 
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_strchr(const char *s, int c);
@@ -48,6 +49,7 @@ int	ft_putchar_fd(char c, int fd);
 int	ft_putnbr_fd(int n, int fd);
 void	ft_bzero(void *s, size_t n);
 void	*ft_memset(void *b, int c, size_t len);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 
 void write_c(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list);
 void write_s(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list);
