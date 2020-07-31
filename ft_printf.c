@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/31 22:25:41 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 00:16:22 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ void read_asterisk_in_format(t_parsed_fmt *parsed_fmt, va_list arg_list)
 	if (parsed_fmt->precision == -1)
 	{
 		parsed_fmt->precision = va_arg(arg_list, int);
-		parsed_fmt->flag |= (parsed_fmt->precision < 0 ? F_MINUS : 0);
-		parsed_fmt->precision = ABS(parsed_fmt->precision);
+		if (parsed_fmt->precision < 0)
+			parsed_fmt->precision = INT_MAX;
 	}
 }
 
