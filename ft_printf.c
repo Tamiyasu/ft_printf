@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/31 18:45:43 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:49:56 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,12 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	return (1);	
 }
 
-char	*ft_utoax(unsigned int n, t_parsed_fmt *parsed_fmt, int base, char *prefix)
+char	*ft_utoax(unsigned long n, t_parsed_fmt *parsed_fmt, int base, char *prefix)
 {
 	char	*return_s;
 	int		order;
 	int		i;
-	unsigned int	n_copy;
+	unsigned long	n_copy;
 	char	base_origin_10;
 
 	base_origin_10 = 'a';
