@@ -39,7 +39,7 @@ typedef struct  s_parsed_fmt
 int	ft_printf(const char *format_str, ...);
 int format_write(char **format_str, int *char_count, va_list arg_list);
 char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base);
-char	*ft_utoax(unsigned int n, t_parsed_fmt *parsed_fmt, int base, char *prefix);
+char	*ft_utoax(unsigned long n, t_parsed_fmt *parsed_fmt, int base, char *prefix);
 
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_strchr(const char *s, int c);
