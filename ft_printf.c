@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/31 01:31:04 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:43:08 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,12 @@ char	*ft_utoax(unsigned int n, t_parsed_fmt *parsed_fmt, int base, char *prefix)
 	if (parsed_fmt->conversion_spec == 'X')
 		base_origin_10 = 'A';
 	if (n == 0 && parsed_fmt->precision == 0)
-		return (ft_calloc(1, 1));
+	{
+		if (!(return_s = ft_calloc(1 + ft_strlen(prefix), 1)));
+			return(return_s);
+		ft_memcpy(return_s, prefix, ft_strlen(prefix));		
+		return (return_s);
+	}
 	if (parsed_fmt->precision == INT_MAX)
 		parsed_fmt->precision = 0;
 	n_copy = n;
@@ -389,13 +394,14 @@ void write_u(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 void write_p(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 {
 	int i;
-	unsigned long long u;
+	unsigned long u;
 	char fill_c;
 	char *str;
 	int base;
 
 	base = 16;
-	u = va_arg(arg_list, unsigned long long);
+	u = va_arg(arg_list, long);
+	printf("------------- : %x\n", u);
 	if (parsed_fmt->flag & F_ZERO && parsed_fmt->precision == INT_MAX)
 		parsed_fmt->precision = parsed_fmt->field_width;
 	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
