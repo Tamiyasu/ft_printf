@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/31 18:49:56 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/31 20:47:21 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,20 @@ void read_int_in_format(char **format_str, char *chr_str, int *i)
 	}
 }
 
-void format_purser(char **format_str, t_parsed_fmt *parsed_fmt)
+void read_asterisk_in_format(t_parsed_fmt *parsed_fmt, va_list arg_list)
+{
+	if (parsed_fmt->field_width == -1)
+		parsed_fmt->field_width = va_arg(arg_list, int);
+	if (parsed_fmt->precision == -1)
+		parsed_fmt->precision = va_arg(arg_list, int);
+}
+
+void format_purser(char **format_str, t_parsed_fmt *parsed_fmt, va_list arg_list)
 {
 	read_flag(format_str, parsed_fmt);
 	read_int_in_format(format_str, "0123456789*", &(parsed_fmt->field_width));
 	read_int_in_format(format_str, "0123456789*.", &(parsed_fmt->precision));
+	read_asterisk_in_format(parsed_fmt, arg_list);
 	while (**format_str && ft_strchr("hlL", **format_str))
 		(*format_str)++;
 	parsed_fmt->conversion_spec = **format_str;
@@ -91,7 +100,7 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 	char_count_in_format++;
 	(*format_str)++;
 	init_t_parsed_fmt(&parsed_fmt);
-	format_purser(format_str, &parsed_fmt);
+	format_purser(format_str, &parsed_fmt, arg_list);
 	if (parsed_fmt.conversion_spec == 's')
 		write_s(&parsed_fmt, char_count, arg_list);
 	else if (parsed_fmt.conversion_spec == 'd' || parsed_fmt.conversion_spec == 'i')
