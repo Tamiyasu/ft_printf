@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/31 18:44:56 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:45:43 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ char	*ft_utoax(unsigned int n, t_parsed_fmt *parsed_fmt, int base, char *prefix)
 		base_origin_10 = 'A';
 	if (n == 0 && parsed_fmt->precision == 0)
 	{
-		if (!(return_s = ft_calloc(1 + ft_strlen(prefix), 1)));
+		if (!(return_s = ft_calloc(1 + ft_strlen(prefix), 1)))
 			return(return_s);
 		ft_memcpy(return_s, prefix, ft_strlen(prefix));		
 		return (return_s);
