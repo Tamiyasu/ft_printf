@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/07/31 18:43:08 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:44:56 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -401,7 +401,7 @@ void write_p(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 
 	base = 16;
 	u = va_arg(arg_list, long);
-	printf("------------- : %x\n", u);
+//	printf("------------- : %x\n", u);
 	if (parsed_fmt->flag & F_ZERO && parsed_fmt->precision == INT_MAX)
 		parsed_fmt->precision = parsed_fmt->field_width;
 	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
