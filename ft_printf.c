@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 00:16:22 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 00:40:58 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void read_asterisk_in_format(t_parsed_fmt *parsed_fmt, va_list arg_list)
 		if (parsed_fmt->precision < 0)
 			parsed_fmt->precision = INT_MAX;
 	}
+//	printf("f : %d, w : %d, p : %d\n", parsed_fmt->flag, parsed_fmt->field_width, parsed_fmt->precision);
 }
 
 void format_purser(char **format_str, t_parsed_fmt *parsed_fmt, va_list arg_list)
@@ -181,6 +182,7 @@ char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base)
 	while (n_copy /= base)
 		order++;
 	order = MAX(order, parsed_fmt->precision) + (n < 0 ? 1 : 0);
+
 	if(!(return_s = ft_calloc(order + 1, sizeof(char))))
 		return (return_s);
 	ft_memset(return_s, '0', order);
@@ -338,10 +340,8 @@ void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 
 	base = 10;
 	d = va_arg(arg_list, int);
-	if (parsed_fmt->flag & F_ZERO && parsed_fmt->precision == INT_MAX)
+	if (parsed_fmt->flag & F_ZERO  && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
 		parsed_fmt->precision = parsed_fmt->field_width - (d < 0 ? 1 : 0);
-	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
-		fill_c = '0';
 	str = ft_itoax(d, parsed_fmt, base);
 	if(!str)
 		str = "(null)";
@@ -418,7 +418,6 @@ void write_p(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 
 	base = 16;
 	u = va_arg(arg_list, long);
-//	printf("------------- : %x\n", u);
 	if (parsed_fmt->flag & F_ZERO && parsed_fmt->precision == INT_MAX)
 		parsed_fmt->precision = parsed_fmt->field_width;
 	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
