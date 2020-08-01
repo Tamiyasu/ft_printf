@@ -19,11 +19,15 @@
 # include <stdlib.h>
 # include <limits.h>
 
-# define F_MINUS 0b1
-# define F_PLUS 0b10
-# define F_SPACE 0b100
-# define F_ZERO 0b1000
-# define F_SHARP 0b10000
+# define F_MINUS       0b1
+# define F_PLUS       0b10
+# define F_SPACE     0b100
+# define F_ZERO     0b1000
+# define F_SHARP   0b10000
+# define F_L      0b100000
+# define F_H     0b1000000
+# define F_LL   0b10000000
+# define F_HH  0b100000000
 
 # define MIN(a, b) ((a) < (b) ? (a) : (b))
 # define MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -36,6 +40,12 @@ typedef struct  s_parsed_fmt
     int precision;
     char conversion_spec; //diouxXfFeEgGaAcsb
 }               t_parsed_fmt;
+
+void read_flag(char **format_str, t_parsed_fmt *parsed_fmt);
+void read_int_in_format(char **format_str, char *chr_str, int *i);
+void read_asterisk_in_format(t_parsed_fmt *parsed_fmt, va_list arg_list);
+void read_hhll(char **format_str, t_parsed_fmt *parsed_fmt);
+void format_purser(char **format_str, t_parsed_fmt *parsed_fmt, va_list arg_list);
 
 int		ft_printf(const char *format_str, ...);
 int 	format_write(char **format_str, int *char_count, va_list arg_list);
