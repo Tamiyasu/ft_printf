@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 15:18:40 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 17:52:44 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 17:54:44 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	write_c(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 void	write_s(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 {
 	int		i;
-	char		fill_c;
+	char	fill_c;
 	char	*str;
 
 	str = va_arg(arg_list, char*);
@@ -109,18 +109,12 @@ void	write_u(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 		str = "(null)";
 	fill_c = ' ';
 	if (pfmt->flag & F_MINUS)
-	{
-		i = 0;
 		*c_cnt += ft_putstr(str, (int)ft_strlen(str));
-	}
 	i = 0;
 	while (i++ < (int)pfmt->field_width - MAX(pfmt->prec, (int)ft_strlen(str)))
 		*c_cnt += ft_putchar_fd(fill_c, 1);
 	if (!(pfmt->flag & F_MINUS))
-	{
-		i = 0;
 		*c_cnt += ft_putstr(str, (int)ft_strlen(str));
-	}
 	free(str);
 }
 
@@ -143,21 +137,11 @@ void	write_p(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 		str = "(null)";
 	fill_c = ' ';
 	if (pfmt->flag & F_MINUS)
-	{
-		i = 0;
-		while (i++ < pfmt->prec - (int)ft_strlen(str))
-			*c_cnt += ft_putchar_fd('0', 1);
 		*c_cnt += ft_putstr(str, (int)ft_strlen(str));
-	}
 	i = 0;
 	while (i++ < (int)pfmt->field_width - MAX(pfmt->prec, (int)ft_strlen(str)))
 		*c_cnt += ft_putchar_fd(fill_c, 1);
 	if (!(pfmt->flag & F_MINUS))
-	{
-		i = 0;
-		while (i++ < pfmt->prec - (int)ft_strlen(str))
-			*c_cnt += ft_putchar_fd('0', 1);
 		*c_cnt += ft_putstr(str, (int)ft_strlen(str));
-	}
 	free(str);
 }
