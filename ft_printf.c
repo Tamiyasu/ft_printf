@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 14:23:04 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 14:33:15 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,29 +32,29 @@ int	ft_printf(const char *format_str, ...)
 
 int format_write(char **format_str, int *char_count, va_list arg_list)
 {
-	t_parsed_fmt	parsed_fmt;
+	t_pfmt	pfmt;
 	int		char_count_in_format;
 
 	char_count_in_format = 0;
 	char_count_in_format++;
 	(*format_str)++;
-	format_purser(format_str, &parsed_fmt, arg_list);
-	if (parsed_fmt.conversion_spec == 's')
-		write_s(&parsed_fmt, char_count, arg_list);
-	else if (parsed_fmt.conversion_spec == 'd' || parsed_fmt.conversion_spec == 'i')
-		write_d(&parsed_fmt, char_count, arg_list);
-	else if (parsed_fmt.conversion_spec == 'u' ||
-			 parsed_fmt.conversion_spec == 'x' || parsed_fmt.conversion_spec == 'X' ||
-			 parsed_fmt.conversion_spec == 'o')
-		write_u(&parsed_fmt, char_count, arg_list);
-	else if (parsed_fmt.conversion_spec == 'c' || parsed_fmt.conversion_spec == '%')
-		write_c(&parsed_fmt, char_count, arg_list);
-	else if (parsed_fmt.conversion_spec == 'p')
-		write_p(&parsed_fmt, char_count, arg_list);
+	format_purser(format_str, &pfmt, arg_list);
+	if (pfmt.conversion_spec == 's')
+		write_s(&pfmt, char_count, arg_list);
+	else if (pfmt.conversion_spec == 'd' || pfmt.conversion_spec == 'i')
+		write_d(&pfmt, char_count, arg_list);
+	else if (pfmt.conversion_spec == 'u' ||
+			 pfmt.conversion_spec == 'x' || pfmt.conversion_spec == 'X' ||
+			 pfmt.conversion_spec == 'o')
+		write_u(&pfmt, char_count, arg_list);
+	else if (pfmt.conversion_spec == 'c' || pfmt.conversion_spec == '%')
+		write_c(&pfmt, char_count, arg_list);
+	else if (pfmt.conversion_spec == 'p')
+		write_p(&pfmt, char_count, arg_list);
 	return (1);	
 }
 
-char	*ft_utoax(unsigned long n, t_parsed_fmt *parsed_fmt, int base, char *prefix)
+char	*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *prefix)
 {
 	char	*return_s;
 	int		order;
@@ -63,22 +63,22 @@ char	*ft_utoax(unsigned long n, t_parsed_fmt *parsed_fmt, int base, char *prefix
 	char	base_origin_10;
 
 	base_origin_10 = 'a';
-	if (parsed_fmt->conversion_spec == 'X')
+	if (pfmt->conversion_spec == 'X')
 		base_origin_10 = 'A';
-	if (n == 0 && parsed_fmt->precision == 0)
+	if (n == 0 && pfmt->precision == 0)
 	{
 		if (!(return_s = ft_calloc(1 + ft_strlen(prefix), 1)))
 			return(return_s);
 		ft_memcpy(return_s, prefix, ft_strlen(prefix));		
 		return (return_s);
 	}
-	if (parsed_fmt->precision == INT_MAX)
-		parsed_fmt->precision = 0;
+	if (pfmt->precision == INT_MAX)
+		pfmt->precision = 0;
 	n_copy = n;
 	order = 1;
 	while (n_copy /= base)
 		order++;
-	order = MAX(order, parsed_fmt->precision) + ft_strlen(prefix);
+	order = MAX(order, pfmt->precision) + ft_strlen(prefix);
 	if(!(return_s = ft_calloc(order + 1, sizeof(char))))
 		return (return_s);
 	ft_memset(return_s, '0', order);
@@ -93,7 +93,7 @@ char	*ft_utoax(unsigned long n, t_parsed_fmt *parsed_fmt, int base, char *prefix
 	return (return_s);
 }
 
-char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base, char *prefix)
+char	*ft_itoax(int n, t_pfmt *pfmt, int base, char *prefix)
 {
 	char	*return_s;
 	int		order;
@@ -102,20 +102,20 @@ char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base, char *prefix)
 
 	if(n < 0)
 		prefix = "-";
-	if (n == 0 && parsed_fmt->precision == 0)
+	if (n == 0 && pfmt->precision == 0)
 	{
 		if (!(return_s = ft_calloc(1 + ft_strlen(prefix), 1)))
 			return(return_s);
 		ft_memcpy(return_s, prefix, ft_strlen(prefix));		
 		return (return_s);
 	}
-	if (parsed_fmt->precision == INT_MAX)
-		parsed_fmt->precision = 0;
+	if (pfmt->precision == INT_MAX)
+		pfmt->precision = 0;
 	n_copy = n;
 	order = 1;
 	while (n_copy /= base)
 		order++;
-	order = MAX(order, parsed_fmt->precision) + ft_strlen(prefix);
+	order = MAX(order, pfmt->precision) + ft_strlen(prefix);
 
 	if(!(return_s = ft_calloc(order + 1, sizeof(char))))
 		return (return_s);
@@ -204,29 +204,29 @@ void	*ft_memset(void *b, int c, size_t len)
 }
 
 
-void write_c(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
+void write_c(t_pfmt *pfmt, int *char_count, va_list arg_list)
 {
 	int		i;
 	char	c;
 	char	fill_c;
 
 	fill_c = ' ';
-	if (parsed_fmt->conversion_spec == '%')
+	if (pfmt->conversion_spec == '%')
 		c = '%';
 	else
 		c = va_arg(arg_list, int);
-	if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS))
+	if (pfmt->flag & F_ZERO && !(pfmt->flag & F_MINUS))
 		fill_c = '0';
-	if (parsed_fmt->flag & F_MINUS)
+	if (pfmt->flag & F_MINUS)
 		*char_count += ft_putchar_fd(c, 1);
 	i = 0;
-	while (i++ < parsed_fmt->field_width - 1)
+	while (i++ < pfmt->field_width - 1)
 		*char_count += ft_putchar_fd(fill_c, 1);
-	if (!(parsed_fmt->flag & F_MINUS))
+	if (!(pfmt->flag & F_MINUS))
 		*char_count += ft_putchar_fd(c, 1);
 }
 
-void write_s(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
+void write_s(t_pfmt *pfmt, int *char_count, va_list arg_list)
 {
 	int i;
 	char fill_c;
@@ -236,18 +236,18 @@ void write_s(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	if(!str)
 		str = "(null)";
 	fill_c = ' ';
-	if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS))
+	if (pfmt->flag & F_ZERO && !(pfmt->flag & F_MINUS))
 		fill_c = '0';
-	if (parsed_fmt->flag & F_MINUS)
-		*char_count += ft_putstr(str, MIN(parsed_fmt->precision, (int)ft_strlen(str)));
+	if (pfmt->flag & F_MINUS)
+		*char_count += ft_putstr(str, MIN(pfmt->precision, (int)ft_strlen(str)));
 	i = 0;
-	while (i++ < (int)parsed_fmt->field_width - MIN(parsed_fmt->precision, (int)ft_strlen(str)))
+	while (i++ < (int)pfmt->field_width - MIN(pfmt->precision, (int)ft_strlen(str)))
 		*char_count += ft_putchar_fd(fill_c, 1);
-	if (!(parsed_fmt->flag & F_MINUS))
-		*char_count += ft_putstr(str, MIN(parsed_fmt->precision, (int)ft_strlen(str)));
+	if (!(pfmt->flag & F_MINUS))
+		*char_count += ft_putstr(str, MIN(pfmt->precision, (int)ft_strlen(str)));
 }
 
-void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
+void write_d(t_pfmt *pfmt, int *char_count, va_list arg_list)
 {
 	int i;
 	int d;
@@ -257,28 +257,28 @@ void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	char *prefix;
 	
 	prefix = "";
-	if (parsed_fmt->flag & F_PLUS)
+	if (pfmt->flag & F_PLUS)
 		prefix = "+";
-	if (parsed_fmt->flag & F_SPACE)
+	if (pfmt->flag & F_SPACE)
 		prefix = " ";
 	base = 10;
 	d = va_arg(arg_list, int);
-	if (parsed_fmt->flag & F_ZERO  && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
-		parsed_fmt->precision = parsed_fmt->field_width - (d < 0 ? 1 : 0);
+	if (pfmt->flag & F_ZERO  && !(pfmt->flag & F_MINUS) && pfmt->precision == INT_MAX)
+		pfmt->precision = pfmt->field_width - (d < 0 ? 1 : 0);
 //	printf("**[%s]", prefix);
-	str = ft_itoax(d, parsed_fmt, base, prefix);
+	str = ft_itoax(d, pfmt, base, prefix);
 	if(!str)
 		str = "(null)";
 	fill_c = ' ';
-	if (parsed_fmt->flag & F_MINUS)
+	if (pfmt->flag & F_MINUS)
 	{
 		i = 0;
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
 	}
 	i = 0;
-	while (i++ < (int)parsed_fmt->field_width - MAX(parsed_fmt->precision, (int)ft_strlen(str)))
+	while (i++ < (int)pfmt->field_width - MAX(pfmt->precision, (int)ft_strlen(str)))
 		*char_count += ft_putchar_fd(fill_c, 1);
-	if (!(parsed_fmt->flag & F_MINUS))
+	if (!(pfmt->flag & F_MINUS))
 	{
 		i = 0;
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
@@ -286,7 +286,7 @@ void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	free(str);
 }
 
-void write_u(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
+void write_u(t_pfmt *pfmt, int *char_count, va_list arg_list)
 {
 	int i;
 	unsigned int u;
@@ -295,40 +295,40 @@ void write_u(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	int base;
 
 	base = 10;
-	if (parsed_fmt->conversion_spec == 'x' || parsed_fmt->conversion_spec == 'X')
+	if (pfmt->conversion_spec == 'x' || pfmt->conversion_spec == 'X')
 		base = 16;
-	if (parsed_fmt->conversion_spec == 'o')
+	if (pfmt->conversion_spec == 'o')
 		base = 8;
 	u = va_arg(arg_list, unsigned int);
-	if (parsed_fmt->flag & F_ZERO && parsed_fmt->precision == INT_MAX)
-		parsed_fmt->precision = parsed_fmt->field_width;
-	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
+	if (pfmt->flag & F_ZERO && pfmt->precision == INT_MAX)
+		pfmt->precision = pfmt->field_width;
+	else if (pfmt->flag & F_ZERO && !(pfmt->flag & F_MINUS) && pfmt->precision == INT_MAX)
 		fill_c = '0';
-	str = ft_utoax(u, parsed_fmt, base, "");
+	str = ft_utoax(u, pfmt, base, "");
 	if(!str)
 		str = "(null)";
 	fill_c = ' ';
-	if (parsed_fmt->flag & F_MINUS)
+	if (pfmt->flag & F_MINUS)
 	{
 		i = 0;
-//		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+//		while (i++ < pfmt->precision - (int)ft_strlen(str))
 //			*char_count += ft_putchar_fd('0', 1);
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
 	}
 	i = 0;
-	while (i++ < (int)parsed_fmt->field_width - MAX(parsed_fmt->precision, (int)ft_strlen(str)))
+	while (i++ < (int)pfmt->field_width - MAX(pfmt->precision, (int)ft_strlen(str)))
 		*char_count += ft_putchar_fd(fill_c, 1);
-	if (!(parsed_fmt->flag & F_MINUS))
+	if (!(pfmt->flag & F_MINUS))
 	{
 		i = 0;
-//		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+//		while (i++ < pfmt->precision - (int)ft_strlen(str))
 //			*char_count += ft_putchar_fd('0', 1);
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
 	}
 	free(str);
 }
 
-void write_p(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
+void write_p(t_pfmt *pfmt, int *char_count, va_list arg_list)
 {
 	int i;
 	unsigned long u;
@@ -338,28 +338,28 @@ void write_p(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 
 	base = 16;
 	u = va_arg(arg_list, long);
-	if (parsed_fmt->flag & F_ZERO && parsed_fmt->precision == INT_MAX)
-		parsed_fmt->precision = parsed_fmt->field_width;
-	else if (parsed_fmt->flag & F_ZERO && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
+	if (pfmt->flag & F_ZERO && pfmt->precision == INT_MAX)
+		pfmt->precision = pfmt->field_width;
+	else if (pfmt->flag & F_ZERO && !(pfmt->flag & F_MINUS) && pfmt->precision == INT_MAX)
 		fill_c = '0';
-	str = ft_utoax(u, parsed_fmt, base, "0x");
+	str = ft_utoax(u, pfmt, base, "0x");
 	if(!str)
 		str = "(null)";
 	fill_c = ' ';
-	if (parsed_fmt->flag & F_MINUS)
+	if (pfmt->flag & F_MINUS)
 	{
 		i = 0;
-		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+		while (i++ < pfmt->precision - (int)ft_strlen(str))
 			*char_count += ft_putchar_fd('0', 1);
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
 	}
 	i = 0;
-	while (i++ < (int)parsed_fmt->field_width - MAX(parsed_fmt->precision, (int)ft_strlen(str)))
+	while (i++ < (int)pfmt->field_width - MAX(pfmt->precision, (int)ft_strlen(str)))
 		*char_count += ft_putchar_fd(fill_c, 1);
-	if (!(parsed_fmt->flag & F_MINUS))
+	if (!(pfmt->flag & F_MINUS))
 	{
 		i = 0;
-		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
+		while (i++ < pfmt->precision - (int)ft_strlen(str))
 			*char_count += ft_putchar_fd('0', 1);
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
 	}

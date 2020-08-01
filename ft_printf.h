@@ -39,7 +39,7 @@ typedef struct  s_parsed_fmt
     int field_width;
     int precision;
     char conversion_spec; //diouxXfFeEgGaAcsb
-}               t_parsed_fmt;
+}               t_pfmt;
 
 void read_flag(char **format_str, t_parsed_fmt *parsed_fmt);
 void read_int_in_format(char **format_str, char *chr_str, int *i);
