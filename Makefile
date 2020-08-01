@@ -13,7 +13,6 @@
 NAME = libftprintf.a
 RM = rm -f
 SRCS = ./ft_printf.c
-SRCS += ./ft_printf.h
 SRCS += ./ft_printf_strformat.c
 SRCS += ./ft_printf_write_i.c
 SRCS += ./ft_libft_mem.c
