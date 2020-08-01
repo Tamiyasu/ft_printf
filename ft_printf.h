@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/26 15:32:11 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 17:39:40 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 17:58:43 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 
 typedef struct	s_parsed_fmt
 {
+
 	int		flag;
 	int		field_width;
 	int		prec;
