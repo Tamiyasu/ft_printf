@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/26 15:32:11 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 18:04:52 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 18:17:10 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@
 
 typedef struct	s_parsed_fmt
 {
-	int		flag;
-	int		field_width;
-	int		prec;
-	char	conversion_spec;
+	int			flag;
+	int			field_width;
+	int			prec;
+	char		conversion_spec;
 }				t_pfmt;
 
 void 			read_flag(char **fmt_str, t_pfmt *pfmt);
