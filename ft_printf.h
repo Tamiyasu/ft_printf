@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/26 15:32:11 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 18:21:23 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 20:48:59 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void			format_purser(char **fmt_str, t_pfmt *pfmt, va_list arg_list);
 
 int				ft_printf(const char *fmt_str, ...);
 int 			format_write(char **fmt_str, int *c_cnt, va_list arg_list);
-char			*ft_itoax(int n, t_pfmt *pfmt, int base, char *pref);
+char			*ft_itoax(long n, t_pfmt *pfmt, int base, char *pref);
 char			*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *pref);
 void			read_asterisk_in_format(t_pfmt *pfmt, va_list arg_list);
 

@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 18:31:58 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 20:48:22 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*ft_itoax_zero(char *prefix)
 	char *return_s;
 
 	if ((return_s = ft_calloc(1 + ft_strlen(prefix), 1)))
-		ft_memcpy(return_s, prefix, ft_strlen(prefix));		
+		ft_memcpy(return_s, prefix, ft_strlen(prefix));
 	return (return_s);
 }
 
@@ -67,13 +67,12 @@ char	*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *prefix)
 {
 	char			*return_s;
 	int				order;
-	int				i;
 	unsigned long	n_copy;
-	char			base_origin_10;
+	char			base_o10;
 
-	base_origin_10 = 'a';
+	base_o10 = 'a' - 10;
 	if (pfmt->conversion_spec == 'X')
-		base_origin_10 = 'A';
+		base_o10 = 'A' - 10;
 	if (n == 0 && pfmt->prec == 0)
 		return (ft_itoax_zero(prefix));
 	if (pfmt->prec == INT_MAX)
@@ -87,21 +86,19 @@ char	*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *prefix)
 		return (return_s);
 	ft_memset(return_s, '0', order);
 	ft_memcpy(return_s, prefix, ft_strlen(prefix));
-	i = 0;
 	while (n)
 	{
-		*(return_s + order - ++i) = ABS(n % base) + (ABS(n % base) < 10 ? '0' : base_origin_10 - 10);
+		*(return_s + --order) = (n % base) + (n % base < 10 ? '0' : base_o10);
 		n /= base;
 	}
 	return (return_s);
 }
 
-char	*ft_itoax(int n, t_pfmt *pfmt, int base, char *prefix)
+char	*ft_itoax(long n, t_pfmt *pfmt, int base, char *prefix)
 {
 	char	*return_s;
 	int		order;
-	int		i;
-	int		n_copy;
+	long	n_copy;
 
 	if (n < 0)
 		prefix = "-";
@@ -114,15 +111,13 @@ char	*ft_itoax(int n, t_pfmt *pfmt, int base, char *prefix)
 	while (n_copy /= base)
 		order++;
 	order = MAX(order, pfmt->prec) + ft_strlen(prefix);
-
 	if (!(return_s = ft_calloc(order + 1, sizeof(char))))
 		return (return_s);
 	ft_memset(return_s, '0', order);
 	ft_memcpy(return_s, prefix, ft_strlen(prefix));
-	i = 0;
 	while (n)
 	{
-		*(return_s + order - ++i) = ABS(n % base) + (ABS(n % base) < 10 ? '0' : 'a' - 10);
+		*(return_s + --order) = ABS(n % base) + '0';
 		n /= base;
 	}
 	return (return_s);
