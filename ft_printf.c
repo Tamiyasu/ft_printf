@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 00:40:58 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 11:39:06 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void read_asterisk_in_format(t_parsed_fmt *parsed_fmt, va_list arg_list)
 		if (parsed_fmt->precision < 0)
 			parsed_fmt->precision = INT_MAX;
 	}
-//	printf("f : %d, w : %d, p : %d\n", parsed_fmt->flag, parsed_fmt->field_width, parsed_fmt->precision);
 }
 
 void format_purser(char **format_str, t_parsed_fmt *parsed_fmt, va_list arg_list)
@@ -164,16 +163,21 @@ char	*ft_utoax(unsigned long n, t_parsed_fmt *parsed_fmt, int base, char *prefix
 	return (return_s);
 }
 
-char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base)
+char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base, char *prefix)
 {
 	char	*return_s;
 	int		order;
 	int		i;
 	int		n_copy;
 
+	if(n < 0)
+		prefix = "-";
 	if (n == 0 && parsed_fmt->precision == 0)
 	{
-		return (ft_calloc(1, 1));
+		if (!(return_s = ft_calloc(1 + ft_strlen(prefix), 1)))
+			return(return_s);
+		ft_memcpy(return_s, prefix, ft_strlen(prefix));		
+		return (return_s);
 	}
 	if (parsed_fmt->precision == INT_MAX)
 		parsed_fmt->precision = 0;
@@ -181,14 +185,13 @@ char	*ft_itoax(int n, t_parsed_fmt *parsed_fmt, int base)
 	order = 1;
 	while (n_copy /= base)
 		order++;
-	order = MAX(order, parsed_fmt->precision) + (n < 0 ? 1 : 0);
+	order = MAX(order, parsed_fmt->precision) + ft_strlen(prefix);
 
 	if(!(return_s = ft_calloc(order + 1, sizeof(char))))
 		return (return_s);
 	ft_memset(return_s, '0', order);
 	*(return_s + order) = '\0';
-	if(n < 0)
-		*(return_s) = '-';
+	ft_memcpy(return_s, prefix, ft_strlen(prefix));
 	i = 0;
 	while (n)
 	{
@@ -238,22 +241,6 @@ size_t	ft_strlen(const char *s)
 	while (*(s + i) != 0)
 		i++;
 	return (i);
-}
-
-int	ft_putnbr_fd(int n, int fd)
-{
-	int count;
-
-	count = 0;
-	if (n / 10)
-		count += ft_putnbr_fd(n / 10, fd);
-	else
-	{
-		if (n < 0)
-			count += ft_putchar_fd('-', fd);
-	}
-	count += ft_putchar_fd('0' + (n % 10) * ((0 < n) ? 1 : -1), fd);
-	return (count);
 }
 
 int	ft_putchar_fd(char c, int fd)
@@ -337,20 +324,25 @@ void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	char fill_c;
 	char *str;
 	int base;
-
+	char *prefix;
+	
+	prefix = "";
+	if (parsed_fmt->flag & F_PLUS)
+		prefix = "+";
+	if (parsed_fmt->flag & F_SPACE)
+		prefix = " ";
 	base = 10;
 	d = va_arg(arg_list, int);
 	if (parsed_fmt->flag & F_ZERO  && !(parsed_fmt->flag & F_MINUS) && parsed_fmt->precision == INT_MAX)
 		parsed_fmt->precision = parsed_fmt->field_width - (d < 0 ? 1 : 0);
-	str = ft_itoax(d, parsed_fmt, base);
+//	printf("**[%s]", prefix);
+	str = ft_itoax(d, parsed_fmt, base, prefix);
 	if(!str)
 		str = "(null)";
 	fill_c = ' ';
 	if (parsed_fmt->flag & F_MINUS)
 	{
 		i = 0;
-//		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
-//			*char_count += ft_putchar_fd('0', 1);
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
 	}
 	i = 0;
@@ -359,8 +351,6 @@ void write_d(t_parsed_fmt *parsed_fmt, int *char_count, va_list arg_list)
 	if (!(parsed_fmt->flag & F_MINUS))
 	{
 		i = 0;
-//		while (i++ < parsed_fmt->precision - (int)ft_strlen(str))
-//			*char_count += ft_putchar_fd('0', 1);
 		*char_count += ft_putstr(str, (int)ft_strlen(str));
 	}
 	free(str);
