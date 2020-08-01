@@ -6,13 +6,13 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 18:10:36 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 18:31:58 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_printf(const char *format_str, ...)
+int		ft_printf(const char *format_str, ...)
 {
 	va_list	arg_list;
 	int		char_count;
@@ -30,7 +30,7 @@ int	ft_printf(const char *format_str, ...)
 	return (char_count);
 }
 
-int format_write(char **format_str, int *char_count, va_list arg_list)
+int		format_write(char **format_str, int *char_count, va_list arg_list)
 {
 	t_pfmt	pfmt;
 	int		char_count_in_format;
@@ -51,7 +51,16 @@ int format_write(char **format_str, int *char_count, va_list arg_list)
 		write_c(&pfmt, char_count, arg_list);
 	else if (pfmt.conversion_spec == 'p')
 		write_p(&pfmt, char_count, arg_list);
-	return (1);	
+	return (1);
+}
+
+char	*ft_itoax_zero(char *prefix)
+{
+	char *return_s;
+
+	if ((return_s = ft_calloc(1 + ft_strlen(prefix), 1)))
+		ft_memcpy(return_s, prefix, ft_strlen(prefix));		
+	return (return_s);
 }
 
 char	*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *prefix)
@@ -66,12 +75,7 @@ char	*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *prefix)
 	if (pfmt->conversion_spec == 'X')
 		base_origin_10 = 'A';
 	if (n == 0 && pfmt->prec == 0)
-	{
-		if (!(return_s = ft_calloc(1 + ft_strlen(prefix), 1)))
-			return(return_s);
-		ft_memcpy(return_s, prefix, ft_strlen(prefix));		
-		return (return_s);
-	}
+		return (ft_itoax_zero(prefix));
 	if (pfmt->prec == INT_MAX)
 		pfmt->prec = 0;
 	n_copy = n;
@@ -102,12 +106,7 @@ char	*ft_itoax(int n, t_pfmt *pfmt, int base, char *prefix)
 	if (n < 0)
 		prefix = "-";
 	if (n == 0 && pfmt->prec == 0)
-	{
-		if (!(return_s = ft_calloc(1 + ft_strlen(prefix), 1)))
-			return(return_s);
-		ft_memcpy(return_s, prefix, ft_strlen(prefix));		
-		return (return_s);
-	}
+		return (ft_itoax_zero(prefix));
 	if (pfmt->prec == INT_MAX)
 		pfmt->prec = 0;
 	n_copy = n;
