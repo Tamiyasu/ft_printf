@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 15:18:40 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/02 00:26:38 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/02 00:31:22 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	write_d(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 	char	*str;
 	int		base;
 	char	*prefix;
-	
+
 	prefix = pfmt->flag & F_PLUS ? "+" : "";
 	prefix = pfmt->flag & F_SPACE ? " " : "";
 	base = 10;
@@ -96,7 +96,6 @@ char	*set_prefix(t_pfmt *pfmt)
 	return (ft_strdup(""));
 }
 
-
 int		set_base(t_pfmt *pfmt)
 {
 	if (pfmt->conversion_spec == 'x' || pfmt->conversion_spec == 'X')
@@ -109,14 +108,14 @@ int		set_base(t_pfmt *pfmt)
 void	write_u(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 {
 	int				i;
-	unsigned int	u;
+	unsigned long	u;
 	char			*str;
 	int				base;
 	char			*prefix;
 
 	prefix = set_prefix(pfmt);
 	base = set_base(pfmt);
-	u = va_arg(arg_list, unsigned int);
+	u = va_arg(arg_list, unsigned long);
 	if (pfmt->flag & F_ZERO && pfmt->prec == INT_MAX)
 		pfmt->prec = pfmt->field_width;
 	if (!(str = ft_utoax(u, pfmt, base, prefix)))
