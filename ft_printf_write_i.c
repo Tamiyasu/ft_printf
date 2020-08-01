@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 15:18:40 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 17:54:44 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 18:07:41 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	write_d(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 	if (pfmt->flag & F_MINUS)
 		*c_cnt += ft_putstr(str, (int)ft_strlen(str));
 	tmp = (int)pfmt->field_width - MAX(pfmt->prec, (int)ft_strlen(str));
-	while (tmp--)
+	while (0 < tmp--)
 		*c_cnt += ft_putchar_fd(fill_c, 1);
 	if (!(pfmt->flag & F_MINUS))
 		*c_cnt += ft_putstr(str, (int)ft_strlen(str));
