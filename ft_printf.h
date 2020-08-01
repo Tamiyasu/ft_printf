@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/26 15:32:11 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 20:48:59 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/02 00:21:22 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,17 @@ void			read_hhll(char **fmt_str, t_pfmt *pfmt);
 void			format_purser(char **fmt_str, t_pfmt *pfmt, va_list arg_list);
 
 int				ft_printf(const char *fmt_str, ...);
-int 			format_write(char **fmt_str, int *c_cnt, va_list arg_list);
+int				format_write(char **fmt_str, int *c_cnt, va_list arg_list);
 char			*ft_itoax(long n, t_pfmt *pfmt, int base, char *pref);
 char			*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *pref);
 void			read_asterisk_in_format(t_pfmt *pfmt, va_list arg_list);
 
-void			*ft_calloc(size_t count, size_t size);
 char			*ft_strchr(const char *s, int c);
 int				ft_putstr(char *s, size_t len);
 size_t			ft_strlen(const char *s);
+char			*ft_strdup(const char *s1);
 int				ft_putchar_fd(char c, int fd);
+void			*ft_calloc(size_t count, size_t size);
 void			ft_bzero(void *s, size_t n);
 void			*ft_memset(void *b, int c, size_t len);
 void			*ft_memcpy(void *dst, const void *src, size_t n);

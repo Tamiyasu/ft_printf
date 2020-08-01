@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 14:47:21 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 15:20:37 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/02 00:20:32 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,21 @@ size_t	ft_strlen(const char *s)
 int		ft_putchar_fd(char c, int fd)
 {
 	return (write(fd, &c, 1));
+}
+
+char	*ft_strdup(const char *s1)
+{
+	int		strlen;
+	char	*return_p;
+	char	*dest;
+
+	strlen = ft_strlen(s1);
+	return_p = malloc(sizeof(char) * strlen + 1);
+	if (!return_p)
+		return (return_p);
+	dest = return_p;
+	while (*s1)
+		*dest++ = *s1++;
+	*dest = 0;
+	return (return_p);
 }

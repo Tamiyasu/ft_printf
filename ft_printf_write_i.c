@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 15:18:40 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 18:07:41 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/02 00:26:38 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,63 +58,77 @@ void	write_s(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 void	write_d(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 {
 	int		tmp;
-	char	fill_c;
 	char	*str;
 	int		base;
 	char	*prefix;
 	
-	prefix = "";
-	if (pfmt->flag & F_PLUS)
-		prefix = "+";
-	if (pfmt->flag & F_SPACE)
-		prefix = " ";
+	prefix = pfmt->flag & F_PLUS ? "+" : "";
+	prefix = pfmt->flag & F_SPACE ? " " : "";
 	base = 10;
 	tmp = va_arg(arg_list, int);
 	if (pfmt->flag & F_ZERO && !(pfmt->flag & F_MINUS) && pfmt->prec == INT_MAX)
 		pfmt->prec = pfmt->field_width - (tmp < 0 ? 1 : 0);
-	str = ft_itoax(tmp, pfmt, base, prefix);
-	if (!str)
-		str = "(null)";
-	fill_c = ' ';
+	if (!(str = ft_itoax(tmp, pfmt, base, prefix)))
+		str = ft_strdup("(null)");
 	if (pfmt->flag & F_MINUS)
 		*c_cnt += ft_putstr(str, (int)ft_strlen(str));
 	tmp = (int)pfmt->field_width - MAX(pfmt->prec, (int)ft_strlen(str));
 	while (0 < tmp--)
-		*c_cnt += ft_putchar_fd(fill_c, 1);
+		*c_cnt += ft_putchar_fd(' ', 1);
 	if (!(pfmt->flag & F_MINUS))
 		*c_cnt += ft_putstr(str, (int)ft_strlen(str));
 	free(str);
+}
+
+char	*set_prefix(t_pfmt *pfmt)
+{
+	if (pfmt->flag & F_SHARP)
+	{
+		if (pfmt->conversion_spec == 'x')
+			return (ft_strdup("0x"));
+		if (pfmt->conversion_spec == 'X')
+			return (ft_strdup("0x"));
+		if (pfmt->conversion_spec == 'o')
+			return (ft_strdup("0"));
+		if (pfmt->conversion_spec == 'O')
+			return (ft_strdup("0"));
+	}
+	return (ft_strdup(""));
+}
+
+
+int		set_base(t_pfmt *pfmt)
+{
+	if (pfmt->conversion_spec == 'x' || pfmt->conversion_spec == 'X')
+		return (16);
+	if (pfmt->conversion_spec == 'o' || pfmt->conversion_spec == 'O')
+		return (8);
+	return (10);
 }
 
 void	write_u(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 {
 	int				i;
 	unsigned int	u;
-	char			fill_c;
 	char			*str;
 	int				base;
+	char			*prefix;
 
-	base = 10;
-	if (pfmt->conversion_spec == 'x' || pfmt->conversion_spec == 'X')
-		base = 16;
-	if (pfmt->conversion_spec == 'o')
-		base = 8;
+	prefix = set_prefix(pfmt);
+	base = set_base(pfmt);
 	u = va_arg(arg_list, unsigned int);
 	if (pfmt->flag & F_ZERO && pfmt->prec == INT_MAX)
 		pfmt->prec = pfmt->field_width;
-	else if (pfmt->flag & F_ZERO && !(pfmt->flag & F_MINUS) && pfmt->prec == INT_MAX)
-		fill_c = '0';
-	str = ft_utoax(u, pfmt, base, "");
-	if (!str)
-		str = "(null)";
-	fill_c = ' ';
+	if (!(str = ft_utoax(u, pfmt, base, prefix)))
+		str = ft_strdup("(null)");
 	if (pfmt->flag & F_MINUS)
 		*c_cnt += ft_putstr(str, (int)ft_strlen(str));
 	i = 0;
 	while (i++ < (int)pfmt->field_width - MAX(pfmt->prec, (int)ft_strlen(str)))
-		*c_cnt += ft_putchar_fd(fill_c, 1);
+		*c_cnt += ft_putchar_fd(' ', 1);
 	if (!(pfmt->flag & F_MINUS))
 		*c_cnt += ft_putstr(str, (int)ft_strlen(str));
+	free(prefix);
 	free(str);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 20:48:22 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 20:55:02 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,7 @@ char	*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *prefix)
 	unsigned long	n_copy;
 	char			base_o10;
 
-	base_o10 = 'a' - 10;
-	if (pfmt->conversion_spec == 'X')
-		base_o10 = 'A' - 10;
+	base_o10 = pfmt->conversion_spec == 'X' ? 'A' - 10 : 'a' - 10;
 	if (n == 0 && pfmt->prec == 0)
 		return (ft_itoax_zero(prefix));
 	if (pfmt->prec == INT_MAX)
