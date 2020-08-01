@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 14:47:21 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 14:49:53 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 15:20:37 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-int	ft_putchar_fd(char c, int fd)
+int		ft_putchar_fd(char c, int fd)
 {
 	return (write(fd, &c, 1));
 }

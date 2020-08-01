@@ -6,13 +6,13 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 15:18:40 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 15:19:06 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 17:28:02 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void write_c(t_pfmt *pfmt, int *char_count, va_list arg_list)
+void	write_c(t_pfmt *pfmt, int *char_count, va_list arg_list)
 {
 	int		i;
 	char	c;
@@ -34,7 +34,7 @@ void write_c(t_pfmt *pfmt, int *char_count, va_list arg_list)
 		*char_count += ft_putchar_fd(c, 1);
 }
 
-void write_s(t_pfmt *pfmt, int *char_count, va_list arg_list)
+void	write_s(t_pfmt *pfmt, int *char_count, va_list arg_list)
 {
 	int i;
 	char fill_c;
@@ -55,14 +55,14 @@ void write_s(t_pfmt *pfmt, int *char_count, va_list arg_list)
 		*char_count += ft_putstr(str, MIN(pfmt->precision, (int)ft_strlen(str)));
 }
 
-void write_d(t_pfmt *pfmt, int *char_count, va_list arg_list)
+void	write_d(t_pfmt *pfmt, int *char_count, va_list arg_list)
 {
-	int i;
-	int d;
-	char fill_c;
-	char *str;
-	int base;
-	char *prefix;
+	int		i;
+	int		d;
+	char	fill_c;
+	char	*str;
+	int		base;
+	char	*prefix;
 	
 	prefix = "";
 	if (pfmt->flag & F_PLUS)
@@ -93,13 +93,13 @@ void write_d(t_pfmt *pfmt, int *char_count, va_list arg_list)
 	free(str);
 }
 
-void write_u(t_pfmt *pfmt, int *char_count, va_list arg_list)
+void	write_u(t_pfmt *pfmt, int *char_count, va_list arg_list)
 {
-	int i;
-	unsigned int u;
-	char fill_c;
-	char *str;
-	int base;
+	int				i;
+	unsigned int	u;
+	char			fill_c;
+	char			*str;
+	int				base;
 
 	base = 10;
 	if (pfmt->conversion_spec == 'x' || pfmt->conversion_spec == 'X')
@@ -131,13 +131,13 @@ void write_u(t_pfmt *pfmt, int *char_count, va_list arg_list)
 	free(str);
 }
 
-void write_p(t_pfmt *pfmt, int *char_count, va_list arg_list)
+void	write_p(t_pfmt *pfmt, int *char_count, va_list arg_list)
 {
-	int i;
-	unsigned long u;
-	char fill_c;
-	char *str;
-	int base;
+	int				i;
+	unsigned long	u;
+	char			fill_c;
+	char			*str;
+	int				base;
 
 	base = 16;
 	u = va_arg(arg_list, long);
