@@ -13,6 +13,11 @@
 NAME = libftprintf.a
 RM = rm -f
 SRCS = ./ft_printf.c
+SRCS += ./ft_printf.h
+SRCS += ./ft_printf_strformat.c
+SRCS += ./ft_printf_write_i.c
+SRCS += ./ft_libft_mem.c
+SRCS += ./ft_libft_str.c
 OBJS = ${SRCS:.c=.o}
 all: ${NAME}
 bonus: ${OBJS} ${BONUS_OBJS}
