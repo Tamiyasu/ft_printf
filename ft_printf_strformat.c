@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 13:56:54 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 14:33:32 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 17:39:28 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ void	read_asterisk_in_format(t_pfmt *pfmt, va_list arg_list)
 		pfmt->flag |= (pfmt->field_width < 0 ? F_MINUS : 0);
 		pfmt->field_width = ABS(pfmt->field_width);
 	}
-	if (pfmt->precision == -1)
+	if (pfmt->prec == -1)
 	{
-		pfmt->precision = va_arg(arg_list, int);
-		if (pfmt->precision < 0)
-			pfmt->precision = INT_MAX;
+		pfmt->prec = va_arg(arg_list, int);
+		if (pfmt->prec < 0)
+			pfmt->prec = INT_MAX;
 	}
 }
 
@@ -92,10 +92,10 @@ void	format_purser(char **format_str, t_pfmt *pfmt, va_list arg_list)
 	pfmt->conversion_spec = '\0';
 	pfmt->field_width = 0;
 	pfmt->flag = 0;
-	pfmt->precision = INT_MAX;
+	pfmt->prec = INT_MAX;
 	read_flag(format_str, pfmt);
 	read_int_in_format(format_str, "0123456789*", &(pfmt->field_width));
-	read_int_in_format(format_str, "0123456789*.", &(pfmt->precision));
+	read_int_in_format(format_str, "0123456789*.", &(pfmt->prec));
 	read_asterisk_in_format(pfmt, arg_list);
 	while (**format_str && ft_strchr("hlL", **format_str))
 		(*format_str)++;

@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/26 15:32:11 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 17:32:53 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 17:39:40 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,20 @@ typedef struct	s_parsed_fmt
 {
 	int		flag;
 	int		field_width;
-	int		precision;
-	char 	conversion_spec;
-}               t_pfmt;
+	int		prec;
+	char	conversion_spec;
+}				t_pfmt;
 
-void 			read_flag(char **format_str, t_pfmt *pfmt);
-void 			read_int_in_format(char **format_str, char *chr_str, int *i);
+void 			read_flag(char **fmt_str, t_pfmt *pfmt);
+void 			read_int_in_format(char **fmt_str, char *chr_str, int *i);
 void 			read_asterisk_in_format(t_pfmt *pfmt, va_list arg_list);
-void 			read_hhll(char **format_str, t_pfmt *pfmt);
-void 			format_purser(char **format_str, t_pfmt *pfmt, va_list arg_list);
+void 			read_hhll(char **fmt_str, t_pfmt *pfmt);
+void 			format_purser(char **fmt_str, t_pfmt *pfmt, va_list arg_list);
 
-int				ft_printf(const char *format_str, ...);
-int 			format_write(char **format_str, int *char_count, va_list arg_list);
-char			*ft_itoax(int n, t_pfmt *pfmt, int base, char *prefix);
-char			*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *prefix);
+int				ft_printf(const char *fmt_str, ...);
+int 			format_write(char **fmt_str, int *c_cnt, va_list arg_list);
+char			*ft_itoax(int n, t_pfmt *pfmt, int base, char *pref);
+char			*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *pref);
 void			read_asterisk_in_format(t_pfmt *pfmt, va_list arg_list);
 
 void			*ft_calloc(size_t count, size_t size);
@@ -61,10 +61,10 @@ void			ft_bzero(void *s, size_t n);
 void			*ft_memset(void *b, int c, size_t len);
 void			*ft_memcpy(void *dst, const void *src, size_t n);
 		
-void			write_c(t_pfmt *pfmt, int *char_count, va_list arg_list);
-void			write_s(t_pfmt *pfmt, int *char_count, va_list arg_list);
-void			write_d(t_pfmt *pfmt, int *char_count, va_list arg_list);
-void			write_u(t_pfmt *pfmt, int *char_count, va_list arg_list);
-void			write_p(t_pfmt *pfmt, int *char_count, va_list arg_list);
+void			write_c(t_pfmt *pfmt, int *c_cnt, va_list arg_list);
+void			write_s(t_pfmt *pfmt, int *c_cnt, va_list arg_list);
+void			write_d(t_pfmt *pfmt, int *c_cnt, va_list arg_list);
+void			write_u(t_pfmt *pfmt, int *c_cnt, va_list arg_list);
+void			write_p(t_pfmt *pfmt, int *c_cnt, va_list arg_list);
 
 #endif

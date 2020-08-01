@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 17:28:48 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/01 17:39:53 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,20 +65,20 @@ char	*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *prefix)
 	base_origin_10 = 'a';
 	if (pfmt->conversion_spec == 'X')
 		base_origin_10 = 'A';
-	if (n == 0 && pfmt->precision == 0)
+	if (n == 0 && pfmt->prec == 0)
 	{
 		if (!(return_s = ft_calloc(1 + ft_strlen(prefix), 1)))
 			return(return_s);
 		ft_memcpy(return_s, prefix, ft_strlen(prefix));		
 		return (return_s);
 	}
-	if (pfmt->precision == INT_MAX)
-		pfmt->precision = 0;
+	if (pfmt->prec == INT_MAX)
+		pfmt->prec = 0;
 	n_copy = n;
 	order = 1;
 	while (n_copy /= base)
 		order++;
-	order = MAX(order, pfmt->precision) + ft_strlen(prefix);
+	order = MAX(order, pfmt->prec) + ft_strlen(prefix);
 	if(!(return_s = ft_calloc(order + 1, sizeof(char))))
 		return (return_s);
 	ft_memset(return_s, '0', order);
@@ -102,20 +102,20 @@ char	*ft_itoax(int n, t_pfmt *pfmt, int base, char *prefix)
 
 	if(n < 0)
 		prefix = "-";
-	if (n == 0 && pfmt->precision == 0)
+	if (n == 0 && pfmt->prec == 0)
 	{
 		if (!(return_s = ft_calloc(1 + ft_strlen(prefix), 1)))
 			return(return_s);
 		ft_memcpy(return_s, prefix, ft_strlen(prefix));		
 		return (return_s);
 	}
-	if (pfmt->precision == INT_MAX)
-		pfmt->precision = 0;
+	if (pfmt->prec == INT_MAX)
+		pfmt->prec = 0;
 	n_copy = n;
 	order = 1;
 	while (n_copy /= base)
 		order++;
-	order = MAX(order, pfmt->precision) + ft_strlen(prefix);
+	order = MAX(order, pfmt->prec) + ft_strlen(prefix);
 
 	if(!(return_s = ft_calloc(order + 1, sizeof(char))))
 		return (return_s);
