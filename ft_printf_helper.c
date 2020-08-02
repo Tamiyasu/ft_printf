@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/02 18:42:19 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/02 18:46:42 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/02 20:59:21 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char				*set_prefix(t_pfmt *pfmt)
 		if (pfmt->conversion_spec == 'x')
 			return (ft_strdup("0x"));
 		if (pfmt->conversion_spec == 'X')
-			return (ft_strdup("0x"));
+			return (ft_strdup("0X"));
 		if (pfmt->conversion_spec == 'o')
 			return (ft_strdup("0"));
 		if (pfmt->conversion_spec == 'O')
@@ -61,4 +61,18 @@ unsigned long long	cast_u(unsigned long long u, t_pfmt *pfmt)
 	if (pfmt->flag & F_L)
 		return ((unsigned long)u);
 	return ((unsigned int)u);
+}
+
+void				set_n(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
+{
+	if (pfmt->flag & F_HH)
+		*(va_arg(arg_list, char*)) = (char)(*c_cnt);
+	else if (pfmt->flag & F_LL)
+		*(va_arg(arg_list, long long*)) = (long long)(*c_cnt);
+	else if (pfmt->flag & F_H)
+		*(va_arg(arg_list, short*)) = (short)(*c_cnt);
+	else if (pfmt->flag & F_L)
+		*(va_arg(arg_list, long*)) = (long)(*c_cnt);
+	else 
+		*(va_arg(arg_list, int*)) = (int)(*c_cnt);
 }

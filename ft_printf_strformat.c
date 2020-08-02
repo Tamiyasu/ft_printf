@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 13:56:54 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/01 17:39:28 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/02 20:13:30 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,8 @@ void	format_purser(char **format_str, t_pfmt *pfmt, va_list arg_list)
 	read_flag(format_str, pfmt);
 	read_int_in_format(format_str, "0123456789*", &(pfmt->field_width));
 	read_int_in_format(format_str, "0123456789*.", &(pfmt->prec));
+	read_hhll(format_str, pfmt);
 	read_asterisk_in_format(pfmt, arg_list);
-	while (**format_str && ft_strchr("hlL", **format_str))
-		(*format_str)++;
 	pfmt->conversion_spec = **format_str;
 	if (**format_str)
 		(*format_str)++;
