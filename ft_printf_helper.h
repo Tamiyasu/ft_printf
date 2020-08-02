@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/02 18:31:51 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/02 18:38:47 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/02 18:44:49 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ typedef struct		s_parsed_fmt
 	char			conversion_spec;
 }					t_pfmt;
 
-long long 			cast_i(long long i, t_pfmt *pfmt);
+int					set_base(t_pfmt *pfmt);
+char				*set_prefix(t_pfmt *pfmt);
+long long			cast_i(long long i, t_pfmt *pfmt);
 unsigned long long	cast_u(unsigned long long u, t_pfmt *pfmt);
 
-# endif
+#endif
