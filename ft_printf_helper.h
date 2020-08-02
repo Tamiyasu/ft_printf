@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/02 18:31:51 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/02 18:44:49 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/02 18:46:58 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define FT_PRINTF_HELPER_H
 
 typedef struct		s_parsed_fmt
-{	
+{
 	int				flag;
 	int				field_width;
 	int				prec;

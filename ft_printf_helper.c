@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/02 18:42:19 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/02 18:43:18 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/02 18:46:42 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ long long			cast_i(long long i, t_pfmt *pfmt)
 	return ((int)i);
 }
 
-unsigned long long 	cast_u(unsigned long long u, t_pfmt *pfmt)
+unsigned long long	cast_u(unsigned long long u, t_pfmt *pfmt)
 {
 	if (pfmt->flag & F_HH)
 		return ((unsigned char)u);
