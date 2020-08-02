@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/26 15:32:11 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/02 00:21:22 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/02 18:21:05 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,27 @@
 # define MAX(a, b) ((a) > (b) ? (a) : (b))
 # define ABS(a) ((a) > 0 ? (a) : -1 * (a))
 
-typedef struct	s_parsed_fmt
-{
-	int			flag;
-	int			field_width;
-	int			prec;
-	char		conversion_spec;
-}				t_pfmt;
+typedef struct		s_parsed_fmt
+{	
+	int				flag;
+	int				field_width;
+	int				prec;
+	char			conversion_spec;
+}					t_pfmt;
 
-void			read_flag(char **fmt_str, t_pfmt *pfmt);
-void			read_int_in_format(char **fmt_str, char *chr_str, int *i);
-void			read_asterisk_in_format(t_pfmt *pfmt, va_list arg_list);
-void			read_hhll(char **fmt_str, t_pfmt *pfmt);
-void			format_purser(char **fmt_str, t_pfmt *pfmt, va_list arg_list);
+void				read_flag(char **fmt_str, t_pfmt *pfmt);
+void				read_int_in_format(char **fmt_str, char *chr_str, int *i);
+void				read_asterisk_in_format(t_pfmt *pfmt, va_list arg_list);
+void				read_hhll(char **fmt_str, t_pfmt *pfmt);
+void				format_purser(char **fmt_str, t_pfmt *pfmt, va_list arg_list);
 
-int				ft_printf(const char *fmt_str, ...);
-int				format_write(char **fmt_str, int *c_cnt, va_list arg_list);
-char			*ft_itoax(long n, t_pfmt *pfmt, int base, char *pref);
-char			*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *pref);
-void			read_asterisk_in_format(t_pfmt *pfmt, va_list arg_list);
+int					ft_printf(const char *fmt_str, ...);
+int					format_write(char **fmt_str, int *c_cnt, va_list arg_list);
+char				*ft_itoax(long n, t_pfmt *pfmt, int base, char *pref);
+char				*ft_utoax(unsigned long n, t_pfmt *pfmt, int base, char *pref);
+void				read_asterisk_in_format(t_pfmt *pfmt, va_list arg_list);
+long long 			cast_i(long long i, t_pfmt *pfmt);
+unsigned long long	cast_u(unsigned long long u, t_pfmt *pfmt);
 
 char			*ft_strchr(const char *s, int c);
 int				ft_putstr(char *s, size_t len);

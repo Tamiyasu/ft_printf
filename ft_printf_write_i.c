@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 15:18:40 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/02 08:21:36 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/02 18:22:27 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	write_d(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 	prefix = pfmt->flag & F_PLUS ? "+" : "";
 	prefix = pfmt->flag & F_SPACE ? " " : "";
 	base = 10;
-	tmp = va_arg(arg_list, long long);
+	tmp = cast_i((int)va_arg(arg_list, long long), pfmt);
 	if (pfmt->flag & F_ZERO && !(pfmt->flag & F_MINUS) && pfmt->prec == INT_MAX)
 		pfmt->prec = pfmt->field_width - (tmp < 0 ? 1 : 0);
 	if (!(str = ft_itoax(tmp, pfmt, base, prefix)))
@@ -105,6 +105,32 @@ int		set_base(t_pfmt *pfmt)
 	return (10);
 }
 
+long long cast_i(long long i, t_pfmt *pfmt)
+{
+	if (pfmt->flag & F_HH)
+		return ((char)i);
+	if (pfmt->flag & F_LL)
+		return ((long long)i);
+	if (pfmt->flag & F_H)
+		return ((short)i);
+	if (pfmt->flag & F_L)
+		return ((long)i);
+	return ((int)i);
+}
+
+unsigned long long cast_u(unsigned long long u, t_pfmt *pfmt)
+{
+	if (pfmt->flag & F_HH)
+		return ((unsigned char)u);
+	if (pfmt->flag & F_LL)
+		return ((unsigned long long)u);
+	if (pfmt->flag & F_H)
+		return ((unsigned short)u);
+	if (pfmt->flag & F_L)
+		return ((unsigned long)u);
+	return ((unsigned int)u);
+}
+
 void	write_u(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 {
 	int					i;
@@ -115,7 +141,7 @@ void	write_u(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 
 	prefix = set_prefix(pfmt);
 	base = set_base(pfmt);
-	u = va_arg(arg_list, unsigned long long);
+	u = cast_u(va_arg(arg_list, unsigned long long), pfmt);
 	if (pfmt->flag & F_ZERO && pfmt->prec == INT_MAX)
 		pfmt->prec = pfmt->field_width;
 	if (!(str = ft_utoax(u, pfmt, base, prefix)))
