@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/02 18:42:19 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/02 20:59:21 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/03 01:57:08 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int					set_base(t_pfmt *pfmt)
 {
 	if (pfmt->conversion_spec == 'x' || pfmt->conversion_spec == 'X')
 		return (16);
-	if (pfmt->conversion_spec == 'o' || pfmt->conversion_spec == 'O')
+	if (pfmt->conversion_spec == 'o')
 		return (8);
 	return (10);
 }

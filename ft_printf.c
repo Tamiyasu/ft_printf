@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 19:42:55 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/03 01:48:24 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/03 01:54:19 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		format_write(char **format_str, int *char_count, va_list arg_list)
 		write_d(&pfmt, char_count, arg_list);
 	else if (pfmt.conversion_spec == 'u' ||
 			pfmt.conversion_spec == 'x' || pfmt.conversion_spec == 'X' ||
-			pfmt.conversion_spec == 'o' || pfmt.conversion_spec == 'O')
+			pfmt.conversion_spec == 'o')
 		write_u(&pfmt, char_count, arg_list);
 	else if (pfmt.conversion_spec == 'c' || pfmt.conversion_spec == '%')
 		write_c(&pfmt, char_count, arg_list);
