@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/02 18:42:19 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/03 01:57:08 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/03 02:02:17 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,6 @@ void				set_n(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 		*(va_arg(arg_list, short*)) = (short)(*c_cnt);
 	else if (pfmt->flag & F_L)
 		*(va_arg(arg_list, long*)) = (long)(*c_cnt);
-	else 
+	else
 		*(va_arg(arg_list, int*)) = (int)(*c_cnt);
 }
