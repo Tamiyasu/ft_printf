@@ -6,7 +6,7 @@
 /*   By: tmurakam <tmurakam@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/01 15:18:40 by tmurakam          #+#    #+#             */
-/*   Updated: 2020/08/02 20:31:28 by tmurakam         ###   ########.fr       */
+/*   Updated: 2020/08/03 12:43:42 by tmurakam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ void	write_d(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 	prefix = pfmt->flag & F_SPACE ? " " : "";
 	prefix = pfmt->flag & F_PLUS ? "+" : prefix;
 	prefix = tmp < 0 ? "-" : prefix;
-	if (pfmt->flag & F_ZERO && !(pfmt->flag & F_MINUS) && pfmt->prec == INT_MAX)
+	if (pfmt->flag & F_ZERO && !(pfmt->flag & F_MINUS) 
+		&& pfmt->prec == INT_MAX && pfmt->field_width)
 		pfmt->prec = pfmt->field_width - ft_strlen(prefix);
 	if (!(str = ft_itoax(tmp, pfmt, base, prefix)))
 		str = ft_strdup("(null)");
@@ -92,7 +93,7 @@ void	write_u(t_pfmt *pfmt, int *c_cnt, va_list arg_list)
 	prefix = set_prefix(pfmt);
 	base = set_base(pfmt);
 	u = cast_u(va_arg(arg_list, unsigned long long), pfmt);
-	if (pfmt->flag & F_ZERO && pfmt->prec == INT_MAX)
+	if (pfmt->flag & F_ZERO && pfmt->prec == INT_MAX && pfmt->field_width)
 		pfmt->prec = pfmt->field_width - ft_strlen(prefix);
 	if (!(str = ft_utoax(u, pfmt, base, prefix)))
 		str = ft_strdup("(null)");

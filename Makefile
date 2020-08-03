@@ -20,15 +20,14 @@ SRCS += ./ft_libft_mem.c
 SRCS += ./ft_libft_str.c
 OBJS = ${SRCS:.c=.o}
 all: ${NAME}
-bonus: ${OBJS} ${BONUS_OBJS}
-	ar rc ${NAME} $^
+bonus: ${NAME}
 ${NAME}: ${OBJS}
 	ar rc ${NAME} $^
 .c.o:
 	gcc -Wall -Wextra -Werror -c $< -o $@
 clean:
-	${RM} ${OBJS} ${BONUS_OBJS}
+	${RM} ${OBJS}
 fclean: clean
 	${RM} ${NAME}
 re:	fclean all
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus
